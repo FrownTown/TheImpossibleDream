@@ -17,7 +17,7 @@
 	turns_per_move = 6
 	see_in_dark = 6
 	move_to_delay = 3
-	base_intents = list(/datum/intent/simple/bite)
+	base_intents = list(/datum/intent/simple/bite/hellhound)
 	butcher_results = list()
 	death_loot = list(/obj/item/magic/infernal/fang = 2)
 	faction = list(FACTION_INFERNAL)
@@ -71,3 +71,6 @@
 	var/mob/living/seared = target
 	apply_scorch_stack(seared, 1)
 	seared.visible_message(span_danger("[src] sears [seared] with hellfire!"))
+
+/datum/intent/simple/bite/hellhound
+	clickcd = HELLHOUND_ATTACK_SPEED

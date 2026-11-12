@@ -22,6 +22,7 @@
 	if(stat != DEAD)
 		hide()
 
+
 /mob/living/simple_animal/hostile/retaliate/rogue/troll/cave/GiveTarget()
 	..()
 	ambush()

@@ -75,7 +75,6 @@
 	ai_controller = null
 	bt_tree = /datum/behavior_tree/node/planner/volf
 	move_base_delay = MOVEMENT_DELAY_SPD_3
-	melee_cooldown = WOLF_ATTACK_SPEED
 
 /mob/living/simple_animal/hostile/retaliate/rogue/fox/Initialize(mapload)
 	. = ..()

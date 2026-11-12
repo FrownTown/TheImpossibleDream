@@ -77,10 +77,13 @@
 	ai_controller = null
 	bt_tree = /datum/behavior_tree/node/planner/rat/undead/summoned
 
-/obj/item/bomb/smoke/decoy/Initialize(mapload)
+/obj/item/explosive/impact/smoke/bomb/decoy/Initialize(mapload)
 	. = ..()
 	playsound(loc, 'sound/magic/decoylaugh.ogg', 50)
-	explode()
+	return INITIALIZE_HINT_LATELOAD
+
+/obj/item/explosive/impact/smoke/bomb/decoy/LateInitialize()
+	detonate()
 
 /mob/living/simple_animal/hostile/rogue/xylixdouble/Initialize(mapload, mob/living/carbon/human/copycat)
 	. = ..()

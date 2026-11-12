@@ -60,7 +60,6 @@
 	ai_controller = null
 	bt_tree = /datum/behavior_tree/node/planner/spider
 	move_base_delay = MOVEMENT_DELAY_SPD_10
-	melee_cooldown = HONEYSPIDER_ATTACK_SPEED
 	stat_attack = UNCONSCIOUS
 
 /mob/living/simple_animal/hostile/retaliate/rogue/spider/mutated

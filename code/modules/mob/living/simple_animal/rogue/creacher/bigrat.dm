@@ -71,7 +71,6 @@
 	ai_controller = null
 	bt_tree = /datum/behavior_tree/node/planner/big_rat
 	move_base_delay = MOVEMENT_DELAY_SPD_3
-	melee_cooldown = RAT_ATTACK_SPEED
 	stat_attack = UNCONSCIOUS
 	var/undead_rat = FALSE
 

@@ -25,7 +25,6 @@
 	ai_controller = null
 	bt_tree = /datum/behavior_tree/node/planner/assassin
 	move_base_delay = MOVEMENT_DELAY_SPD_10
-	melee_cooldown = MINOR_DREAMFIEND_ATTACK_SPEED
 	var/next_blink = 0
 	var/blink_cooldown = 5 SECONDS
 	var/inner_tele_radius = 1
@@ -50,7 +49,6 @@
 	maxHealth = MAJOR_DREAMFIEND_HEALTH
 	melee_damage_lower = 50
 	melee_damage_upper = 90
-	melee_cooldown = MAJOR_DREAMFIEND_ATTACK_SPEED
 	desummon_timer = 12 SECONDS
 
 	attack_sound = list('sound/mobs/abyssal/abyssal_attack.ogg','sound/mobs/abyssal/abyssal_attack2.ogg')
@@ -67,7 +65,6 @@
 	melee_damage_lower = 40
 	melee_damage_upper = 120
 	base_intents = list(/datum/intent/simple/dreamfiend_ancient)
-	melee_cooldown = ANCIENT_DREAMFIEND_ATTACK_SPEED
 	desummon_timer = 20 SECONDS
 
 	STACON = 20

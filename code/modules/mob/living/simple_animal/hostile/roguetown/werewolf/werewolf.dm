@@ -1,5 +1,6 @@
 /mob/living/simple_animal/hostile/retaliate/rogue/werewolf_npc
 	name = "WEREWOLF"
+	mob_size = MOB_SIZE_LARGE
 	desc = "THE HOWL OF A MAD GOD SHAKES YOUR BONES! FLESH SHORN INTO VISCERA SPRAYS THE WALLS! RIP AND TEAR!"
 	icon = 'icons/roguetown/mob/monster/werewolf.dmi'
 	icon_state = "wwolf_m"
@@ -65,7 +66,6 @@
 	ai_controller = null
 	bt_tree = /datum/behavior_tree/node/planner/volf
 	move_base_delay = MOVEMENT_DELAY_SPD_3
-	melee_cooldown = WOLF_ATTACK_SPEED
 
 /mob/living/simple_animal/hostile/retaliate/rogue/werewolf_npc/Initialize(mapload)
 	. = ..()

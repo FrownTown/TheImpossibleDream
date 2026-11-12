@@ -30,12 +30,12 @@
 				if("Melancholic Crankbox - Antimagic")
 					choice = /obj/item/psydonmusicbox
 				if("Daybreak - Silver Whip")
-					choice = /obj/item/rogueweapon/whip/antique/psywhip
+					choice = /obj/item/rogueweapon/whip/antique/psy
 				if("Stigmata - Silver Halberd")
-					choice = /obj/item/rogueweapon/halberd/psyhalberd
+					choice = /obj/item/rogueweapon/halberd/silver/psy
 					user.adjust_skillrank_up_to(/datum/skill/combat/polearms, 4, TRUE)	//We make sure the weapon is usable by the Inquisitor.
 				if("Apocrypha - Silver Greatsword")
-					choice = /obj/item/rogueweapon/greatsword/psygsword
+					choice = /obj/item/rogueweapon/greatsword/silver/psy
 					user.adjust_skillrank_up_to(/datum/skill/combat/swords, 4, TRUE)		//Ditto.
 				if("Golgatha - SYON Shard Censer")
 					choice = /obj/item/flashlight/flare/torch/lantern/psycenser
@@ -320,15 +320,15 @@ Inquisitorial armory down here
 
 /obj/structure/closet/crate/chest/inqarmory/PopulateContents()
 	.=..()
-	new /obj/item/rogueweapon/huntingknife/idagger/silver/psydagger(src)
-	new /obj/item/rogueweapon/greatsword/psygsword(src)
-	new /obj/item/rogueweapon/halberd/psyhalberd(src)
-	new /obj/item/rogueweapon/whip/psywhip_lesser
-	new /obj/item/rogueweapon/flail/sflail/psyflail
-	new /obj/item/rogueweapon/spear/psyspear(src)
-	new /obj/item/rogueweapon/sword/long/psysword(src)
-	new /obj/item/rogueweapon/mace/goden/psymace(src)
-	new /obj/item/rogueweapon/stoneaxe/battle/psyaxe(src)
+	new /obj/item/rogueweapon/huntingknife/idagger/steel/silver/psy(src)
+	new /obj/item/rogueweapon/greatsword/silver/psy(src)
+	new /obj/item/rogueweapon/halberd/silver/psy(src)
+	new /obj/item/rogueweapon/whip/silver/psy
+	new /obj/item/rogueweapon/flail/sflail/silver/psy
+	new /obj/item/rogueweapon/spear/silver/psy(src)
+	new /obj/item/rogueweapon/sword/long/silver/psy(src)
+	new /obj/item/rogueweapon/mace/goden/psy(src)
+	new /obj/item/rogueweapon/stoneaxe/battle/silver/psy(src)
 	*/
 
 /obj/item/flashlight/flare/torch/lantern/psycenser
@@ -351,7 +351,6 @@ Inquisitorial armory down here
 		. += span_info("When opened, the 'BLESS' intent can be used to anoint Psydonic silver weaponry. Blessing a Psydonic silver weapon greatly enhances the power of its critical hits and debuffs against sunderable opponents.")
 		. += span_info("Blessing someone else, who happens to be a worshipper of Psydon, will temporarily buff them with increased Willpower, Constitution, and Fortune.")
 		. += span_warning("If the 'SMASH' intent is used while it's opened, the residing shard will violently explode with unimaginable force.")
-		. += span_warning("<font color='#00e1ff'>While active, Golgatha burns and weakens anyone who attacks its bearer. The effect persists only while the attacker remains within the relic's light. This feature requires the bearer to be Silverblessed, and inflicts extra damage to mindless foes.</font>")
 	if(fuel <= 0)
 		. += span_info("It is gone.")
 
@@ -418,7 +417,7 @@ Inquisitorial armory down here
 	if(ismob(A) && on && (user.used_intent.type == /datum/intent/flail/smash/golgotha) && user.cmode)
 		user.visible_message(span_warningbig("[user] smashes the exposed [src], shattering the shard of SYON!"))
 		user.visible_message(span_blue(pick("WHY--!!","SYON BLAS--!!","ENDU--!!","ENDURE THI--!!","WHAT THE F--!!","OH MY ALLFA--!!","OH PSYDO--!!","KABOO--!!","MASHALLA--!!","OH ADONA--!!","OH SHI--!!","PSYDO--!!","PSYDON BLAS--!!")))
-		explosion(get_turf(A),devastation_range = 3, heavy_impact_range = 5, light_impact_range = 6, flame_range = 3, flash_range = 6, smoke = FALSE)
+		explosion(get_turf(A), extreme_impact_range = 3, heavy_impact_range = 5, light_impact_range = 6, flame_range = 3, flash_range = 6, smoke = FALSE)
 		fuel = 0
 		turn_off()
 		icon_state = "psycenser-broken"
@@ -844,8 +843,6 @@ Inquisitorial armory down here
 					cursedblood = 2
 				if(M.mind.has_antag_datum(/datum/antagonist/vampire))
 					cursedblood = 3
-				if(HAS_TRAIT (M, TRAIT_BLACKBLOOD))
-					cursedblood = 0.1 // trolling the inquisition newbies
 			update_icon()
 			takeblood(M, user)
 		else
@@ -1835,8 +1832,6 @@ GLOBAL_LIST_INIT(inquisition_used_ids, list())
 	var/list/d = H.get_mob_descriptors()
 	report_html += "Height: [build_coalesce_description_nofluff(d, H, list(MOB_DESCRIPTOR_SLOT_HEIGHT), "%DESC1%")]<br>"
 	report_html += "Build: [build_coalesce_description_nofluff(d, H, list(MOB_DESCRIPTOR_SLOT_BODY), "%DESC1%")]<br>"
-	if(HAS_TRAIT(H, TRAIT_BLACKBLOOD)) // blackbloods are just checking records, no mistake chance needed
-		report_html += "<i>By decree of the Holy Otavan Inquisition, the subject is judged CURED and restored to the flock of commonfolk. Should they ever stray from the Allfather's Light and back to evil against humenkind, let His 'Final Mercy' be carried out in due diligence. <b>They shall NOT be granted another second chance</b>.</i><br>"
 	report_html += "<hr>"
 	report_html += "<b>LYFEBLOOD-LUX RESONATOR RESULTS</b><br><br>"
 	if(HAS_TRAIT(H, TRAIT_ANCIENT_HAG))
@@ -1888,11 +1883,7 @@ GLOBAL_LIST_INIT(inquisition_used_ids, list())
 	report_html += "<b>HAEMOLOGICAL FINDINGS</b><br><br>"
 	var/found = FALSE
 	if(H.mind)
-		if(HAS_TRAIT(H, TRAIT_BLACKBLOOD))
-			report_html += "<font color='#3D3D3D'><b>Stabilized Blackblood Tincture</b></font><br><br>"
-			report_html += "<i>Lethal concentrations of Atra Ferrum, Nigredo Salts, Vitriol Ash, and Coagulated Psyturnine Humours remain suspended throughout the sample. Complete melanization and abnormal viscosity are wholly consistent with recent radical purification treatments for Quicksilver-resistant subjects.</i><br><br>"
-			found = TRUE
-		else if(HAS_TRAIT(H, TRAIT_ANCIENT_HAG))
+		if(HAS_TRAIT(H, TRAIT_ANCIENT_HAG))
 			report_html += "<font color='#5C3A6E'><b>Anomalous Blood</b></font><br><br>"
 			report_html += "<i>The sample is laden with accursed humours and bears the unmistakable taint of ancient malisons. Though greatly withered by age, the blood yet clings to unnatural vigor, a condition recorded only in those sustained by profane sorceries and long familiarity with the Devil's arts.</i><br><br>"
 			found = TRUE
