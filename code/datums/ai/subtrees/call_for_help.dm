@@ -24,8 +24,7 @@
 	for(var/mob/living/carbon/human/ally in view(help_range, living_pawn))
 		if(ally == living_pawn)
 			continue
-		var/datum/ai_controller/ally_ctrl = ally.ai_controller
-		if(!ally_ctrl)
+		if(!ally.has_ai_brain())
 			continue
 		allowed = TRUE
 		break
@@ -50,22 +49,21 @@
 	for(var/mob/living/carbon/human/ally in view(9, living_pawn))
 		if(ally == living_pawn)
 			continue
-		var/datum/ai_controller/ally_ctrl = ally.ai_controller
-		if(!ally_ctrl)
+		if(!ally.has_ai_brain())
 			continue
 		if(!living_pawn.faction_check_mob(ally, FALSE))
 			continue
-		if(ally_ctrl.blackboard[BB_BASIC_MOB_CURRENT_TARGET] == current_target)
+		if(ally.ai_bb_get(BB_BASIC_MOB_CURRENT_TARGET) == current_target)
 			continue
 
-		var/datum/component/ai_aggro_system/aggro_comp = ally_ctrl.pawn.GetComponent(/datum/component/ai_aggro_system)
+		var/datum/component/ai_aggro_system/aggro_comp = ally.GetComponent(/datum/component/ai_aggro_system)
 		if(aggro_comp)
 			aggro_comp.add_threat_to_mob_capped(current_target, AGGRO_CALL_FOR_HELP_THREAT, AGGRO_CALL_FOR_HELP_THREAT)
 			continue
 
-		if(!ally_ctrl.blackboard[BB_BASIC_MOB_CURRENT_TARGET])
-			ally_ctrl.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, current_target)
-			ally_ctrl.wake_for_combat()
-			ally_ctrl.CancelActions()
+		if(!ally.ai_bb_get(BB_BASIC_MOB_CURRENT_TARGET))
+			ally.ai_bb_set(BB_BASIC_MOB_CURRENT_TARGET, current_target)
+			ally.ai_wake_for_combat()
+			ally.ai_cancel_actions()
 
 	return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_SUCCEEDED

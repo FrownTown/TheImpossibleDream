@@ -3,7 +3,6 @@
 	button_icon = 'icons/mob/actions/zizomiracles.dmi'
 	required_items = list(/obj/item/clothing/neck/roguetown/psicross)
 
-
 /datum/action/cooldown/spell/projectile/zizo
 	background_icon = 'icons/mob/actions/zizomiracles.dmi'
 	button_icon = 'icons/mob/actions/zizomiracles.dmi'
@@ -427,7 +426,7 @@
 	if(minion)
 		minion.dismissing = TRUE
 
-	M.ai_controller?.set_ai_status(AI_STATUS_OFF)
+	M.ai_set_status(AI_STATUS_OFF)
 
 	M.visible_message(span_notice("[M] collapses into a heap of bones and dust."))
 
@@ -444,7 +443,6 @@
 	primary_resource_cost = 100
 	spell_requirements = SPELL_REQUIRES_NO_ANTIMAGIC | SPELL_REQUIRES_HUMAN
 	charge_sound = 'sound/magic/chargingold.ogg'
-
 
 ///////////////////////
 // T4 - Bewstow Chant //

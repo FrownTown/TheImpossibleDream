@@ -43,7 +43,8 @@
 	food_type = list(/obj/item/reagent_containers/food/snacks, /obj/item/bodypart)
 	can_have_ai = FALSE //disable native ai
 	AIStatus = AI_OFF
-	ai_controller = /datum/ai_controller/haunt
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/haunt
 	move_base_delay = MOVEMENT_DELAY_SPD_10
 
 /mob/living/simple_animal/hostile/rogue/haunt/electrocute_act(shock_damage, source, siemens_coeff = 1, flags = NONE)

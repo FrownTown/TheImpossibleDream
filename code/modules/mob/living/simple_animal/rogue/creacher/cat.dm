@@ -47,14 +47,14 @@
 	//new ai, old ai off
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/generic
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/generic
 	move_base_delay = MOVEMENT_DELAY_LUMBERING
 
 	// Loot
 	botched_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat = 1)
 	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat = 2)
 	perfect_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat = 2, /obj/item/natural/fur/bobcat = 1)	//Not a bobcat but fuck it, it's kinda funny.
-
 
 	// Misc
 	mob_size = MOB_SIZE_SMALL

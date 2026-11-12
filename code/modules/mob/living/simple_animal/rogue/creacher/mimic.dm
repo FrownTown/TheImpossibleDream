@@ -45,7 +45,8 @@
 	STASTR = 15
 	STASPD = 5
 
-	ai_controller = /datum/ai_controller/mimic
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/mimic
 	move_base_delay = MOVEMENT_DELAY_SLOW
 	AIStatus = AI_OFF
 	can_have_ai = FALSE

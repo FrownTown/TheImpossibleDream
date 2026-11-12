@@ -65,7 +65,8 @@
 
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/undead/wolf
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/undead/wolf
 	move_base_delay = MOVEMENT_DELAY_SLOW
 
 /mob/living/simple_animal/hostile/retaliate/rogue/wolf_undead/AttackingTarget() //7+1d6 vs con to knock ppl down

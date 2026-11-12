@@ -586,9 +586,9 @@
 	var/turf/spawn_turf = pick(turfs)
 
 	F = new F(spawn_turf)
-	F.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, target)
-	F.ai_controller.set_blackboard_key(BB_MAIN_TARGET, target)
-	F.ai_controller.insert_blackboard_key_lazylist(BB_BASIC_MOB_RETALIATE_LIST, target)
+	F.ai_bb_set(BB_BASIC_MOB_CURRENT_TARGET, target)
+	F.ai_bb_set(BB_MAIN_TARGET, target)
+	F.ai_bb_insert_lazylist(BB_BASIC_MOB_RETALIATE_LIST, target)
 
 	F.visible_message(span_notice("A [F] manifests following after [target]... countless teeth bared with hostility!"))
 	return TRUE

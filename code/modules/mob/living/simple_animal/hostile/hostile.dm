@@ -33,7 +33,6 @@
 	var/retreat_distance = null //If our mob runs from players when they're too close, set in tile distance. By default, mobs do not retreat.
 	var/minimum_distance = 1 //Minimum approach distance, so ranged mobs chase targets down, but still keep their distance set in tiles to the target, set higher to make mobs keep distance
 
-
 //These vars are related to how mobs locate and target
 	var/robust_searching = 0 //By default, mobs have a simple searching method, set this to 1 for the more scrutinous searching (stat_attack, stat_exclusive, etc), should be disabled on most mobs
 	var/vision_range = 6 //How big of an area to search for targets in, a vision of 9 attempts to find targets as soon as they walk into screen view
@@ -42,6 +41,9 @@
 	var/search_objects_timer_id //Timer for regaining our old search_objects value after being attacked
 	var/search_objects_regain_time = 30 //the delay between being attacked and gaining our old search_objects value back
 	var/list/wanted_objects = list() //A typecache of objects types that will be checked against to attack, should we have search_objects enabled
+	var/list/wanted_prey = list()
+	var/list/favored_structures = list()
+	var/aggressive = 0
 	var/stat_attack = CONSCIOUS //Mobs with stat_attack to UNCONSCIOUS will attempt to attack things that are unconscious, Mobs with stat_attack set to DEAD will attempt to attack the dead.
 	var/stat_exclusive = FALSE //Mobs with this set to TRUE will exclusively attack things defined by stat_attack, stat_attack DEAD means they will only attack corpses
 	var/attack_same = 0 //Set us to 1 to allow us to attack our own faction
@@ -220,8 +222,6 @@
 		GiveTarget(Target)
 	return Target //We now have a target
 
-
-
 /mob/living/simple_animal/hostile/proc/PossibleThreats()
 	. = list()
 	for(var/pos_targ in ListTargets())
@@ -232,8 +232,6 @@
 		if(CanAttack(A))
 			. += A
 			continue
-
-
 
 /mob/living/simple_animal/hostile/proc/Found(atom/A)//This is here as a potential override to pick a specific target if available
 	if (isliving(A))
@@ -394,7 +392,6 @@
 		approaching_target = FALSE
 	walk_to(src, target, minimum_distance, cached_multiplicative_slowdown)
 
-
 /mob/living/simple_animal/hostile/adjustHealth(amount, updating_health = TRUE, forced = FALSE)
 	. = ..()
 	if(!ckey && !stat && search_objects < 3 && . > 0)//Not unconscious, and we don't ignore mobs
@@ -406,7 +403,6 @@
 			FindTarget()
 		else if(target != null && prob(40))//No more pulling a mob forever and having a second player attack it, it can switch targets now if it finds a more suitable one
 			FindTarget()
-
 
 /mob/living/simple_animal/hostile/proc/AttackingTarget()
 	if(target == src)
@@ -427,7 +423,6 @@
 			taunt_chance = max(taunt_chance-7,2)
 		emote("aggro")
 		mob_timers["npc_chatter"] = world.time
-
 
 /mob/living/simple_animal/hostile/proc/LoseAggro()
 	stop_automated_movement = 0
@@ -486,7 +481,6 @@
 		return
 	visible_message(span_danger("<b>[src]</b> [ranged_message] at [A]!"))
 
-
 	var/turf/locked_turf = get_turf(A)
 	var/aim_window = get_ranged_aim_window()
 	var/datum/callback/cb = CALLBACK(src, PROC_REF(Shoot), A, locked_turf)
@@ -496,7 +490,6 @@
 	else
 		addtimer(cb, aim_window)
 	ranged_cooldown = world.time + ranged_cooldown_time
-
 
 /mob/living/simple_animal/hostile/proc/Shoot(atom/targeted_atom, turf/locked_turf)
 	if(QDELETED(src) || QDELETED(targets_from) || !targets_from.loc)
@@ -528,10 +521,8 @@
 		P.fire()
 		return P
 
-
 /mob/living/simple_animal/hostile/proc/CanSmashTurfs(turf/T)
 	return iswallturf(T) || ismineralturf(T)
-
 
 /mob/living/simple_animal/hostile/Move(atom/newloc, dir , step_x , step_y)
 	if(dodging && approaching_target && prob(dodge_prob) && moving_diagonally == 0 && isturf(loc) && isturf(newloc) && !incapacitated())
@@ -610,7 +601,6 @@
 		for(var/dir in GLOB.cardinals)
 			DestroyObjectsInDirection(dir)
 
-
 /mob/living/simple_animal/hostile/proc/EscapeConfinement()
 	if(buckled)
 		buckled.attack_animal(src)
@@ -619,7 +609,6 @@
 	if(!isturf(targets_from.loc))//Did someone put us in something?
 		var/atom/A = targets_from.loc
 		A.attack_animal(src)//Bang on it till we get out
-
 
 /mob/living/simple_animal/hostile/proc/FindHidden()
 	if(istype(target.loc, /obj/structure/closet))
@@ -634,8 +623,6 @@
 		GiveTarget(A)
 		OpenFire(A)
 	..()
-
-
 
 ////// AI Status ///////
 /mob/living/simple_animal/hostile/proc/AICanContinue(list/possible_targets)
@@ -655,7 +642,6 @@
 	else
 		return FALSE
 
-
 //These two procs handle losing our target if we've failed to attack them for
 //more than lose_patience_timeout deciseconds, which probably means we're stuck
 /mob/living/simple_animal/hostile/proc/GainPatience()
@@ -663,17 +649,14 @@
 		LosePatience()
 		lose_patience_timer_id = addtimer(CALLBACK(src, PROC_REF(LoseTarget)), lose_patience_timeout, TIMER_STOPPABLE)
 
-
 /mob/living/simple_animal/hostile/proc/LosePatience()
 	deltimer(lose_patience_timer_id)
-
 
 //These two procs handle losing and regaining search_objects when attacked by a mob
 /mob/living/simple_animal/hostile/proc/LoseSearchObjects()
 	search_objects = 0
 	deltimer(search_objects_timer_id)
 	search_objects_timer_id = addtimer(CALLBACK(src, PROC_REF(RegainSearchObjects)), search_objects_regain_time, TIMER_STOPPABLE)
-
 
 /mob/living/simple_animal/hostile/proc/RegainSearchObjects(value)
 	if(!value)

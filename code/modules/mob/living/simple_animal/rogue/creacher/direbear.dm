@@ -68,7 +68,8 @@
 //new ai, old ai off
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/direbear
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/direbear
 	move_base_delay = MOVEMENT_DELAY_SPD_3
 
 /mob/living/simple_animal/hostile/retaliate/rogue/direbear/get_sound(input)

@@ -49,7 +49,8 @@
 	dodgetime = 40
 	aggressive = 1
 
-	ai_controller = /datum/ai_controller/fae/skirmisher/melee/reactive
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/fae/skirmisher/melee/reactive
 	move_base_delay = MOVEMENT_DELAY_SPD_10
 
 /mob/living/simple_animal/hostile/retaliate/rogue/fae/glimmerwing/Initialize(mapload)

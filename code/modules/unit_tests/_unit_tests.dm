@@ -62,6 +62,9 @@
 #define TEST_CREATE_AND_DESTROY 9001
 // BEGIN_INCLUDE
 #include "anchored_mobs.dm"
+#include "behavior_tree_ai.dm"
+#include "behavior_tree_parity.dm"
+#include "behavior_tree_parity_all.dm"
 #include "component_tests.dm"
 #include "container_collision.dm"
 #include "craftable_hardset_sellprice.dm"

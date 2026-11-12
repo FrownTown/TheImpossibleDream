@@ -65,7 +65,8 @@
 //new ai, old ai off
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/volf
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/volf
 	move_base_delay = MOVEMENT_DELAY_SPD_3
 	melee_cooldown = WOLF_ATTACK_SPEED
 
@@ -75,7 +76,7 @@
 	AddElement(/datum/element/ai_flee_while_injured, 0.75, 0.4)
 	gender = pick(MALE, FEMALE)
 	update_icon()
-	ai_controller.set_blackboard_key(BB_BASIC_FOODS, food_type)
+	ai_bb_set(BB_BASIC_FOODS, food_type)
 
 /obj/effect/decal/remains/badger
 	name = "remains"

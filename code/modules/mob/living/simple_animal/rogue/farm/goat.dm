@@ -4,7 +4,7 @@
 	if(tame)
 		tamed()
 	AddElement(/datum/element/ai_retaliate)
-	ai_controller.set_blackboard_key(BB_BASIC_FOODS, typecacheof(food_type))
+	ai_bb_set(BB_BASIC_FOODS, typecacheof(food_type))
 
 /mob/living/simple_animal/hostile/retaliate/rogue/goat/Destroy()
 	GLOB.farm_animals = max(GLOB.farm_animals - 1, 0)
@@ -25,15 +25,12 @@
 		MOB_LAYER+0.1,
 	)
 
-
 /mob/living/simple_animal/hostile/retaliate/rogue/goat/update_icon()
 	cut_overlays()
 	..()
 	if(stat != DEAD)
 		add_saddleicon("saddle-f-above", "saddle-f")
 		add_ridericon("goat_mounted")
-
-
 
 /mob/living/simple_animal/hostile/retaliate/rogue/goat/Life()
 	..()
@@ -109,7 +106,8 @@
 	//new ai, old ai off
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/generic/goat //slightly more agressive retaliation
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/generic/goat //slightly more agressive retaliation
 	move_base_delay = MOVEMENT_DELAY_SLOW
 
 /mob/living/simple_animal/hostile/retaliate/rogue/goat/tame
@@ -131,7 +129,6 @@
 			return pick('sound/vo/mobs/goat/death (1).ogg','sound/vo/mobs/goat/death (2).ogg')
 		if("idle")
 			return pick('sound/vo/mobs/goat/idle (1).ogg','sound/vo/mobs/goat/idle (2).ogg','sound/vo/mobs/goat/idle (3).ogg')
-
 
 /mob/living/simple_animal/hostile/retaliate/rogue/goat/goatlet
 	icon = 'icons/roguetown/mob/monster/gote.dmi'
@@ -263,7 +260,8 @@
 	//new ai, old ai off
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/generic
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/generic
 	move_base_delay = MOVEMENT_DELAY_SLOW
 
 /mob/living/simple_animal/hostile/retaliate/rogue/goatmale/tame
@@ -295,7 +293,7 @@
 	if(tame)
 		tamed()
 	AddElement(/datum/element/ai_retaliate)
-	ai_controller.set_blackboard_key(BB_BASIC_FOODS, typecacheof(food_type))
+	ai_bb_set(BB_BASIC_FOODS, typecacheof(food_type))
 
 /mob/living/simple_animal/hostile/retaliate/rogue/goatmale/Destroy()
 	..()
@@ -374,7 +372,6 @@
 		if(BODY_ZONE_L_ARM)
 			return "foreleg"
 	return ..()
-
 
 /mob/living/simple_animal/hostile/retaliate/rogue/goat/goatletboy
 	icon = 'icons/roguetown/mob/monster/gote.dmi'

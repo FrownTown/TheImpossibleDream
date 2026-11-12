@@ -79,7 +79,6 @@ have ways of interacting with a specific atom and control it. They posses a blac
 	///
 	var/movement_displacement_time = 0
 
-
 /datum/ai_controller/New(atom/new_pawn)
 	change_ai_movement_type(ai_movement)
 	init_subtrees()
@@ -110,7 +109,6 @@ have ways of interacting with a specific atom and control it. They posses a blac
 		RegisterSignal(current_movement_target, COMSIG_PARENT_PREQDELETED, PROC_REF(on_movement_target_delete))
 	if(new_movement)
 		change_ai_movement_type(new_movement)
-
 
 /**
  * Removes a subtree from planning_subtrees by typepath.
@@ -619,7 +617,6 @@ have ways of interacting with a specific atom and control it. They posses a blac
 			arguments += stored_arguments
 		current_behavior.finish_action(arglist(arguments))
 
-
 ///This proc handles changing ai status, and starts/stops processing if required.
 /datum/ai_controller/proc/set_ai_status(new_ai_status)
 	if(ai_status == new_ai_status)
@@ -661,9 +658,10 @@ have ways of interacting with a specific atom and control it. They posses a blac
 
 /proc/alert_ai_visibility_change(atom/source, range = 7)
 	for(var/mob/living/L in view(range, source))
-		if(!L.ai_controller)
-			continue
-		L.ai_controller.nudge_target_scan()
+		if(L.ai_controller)
+			L.ai_controller.nudge_target_scan()
+		else if(L.ai_root?.planner)
+			L.ai_root.nudge_target_scan()
 
 ///Call this to add a behavior to the stack.
 /datum/ai_controller/proc/queue_behavior(behavior_type, ...)
@@ -929,7 +927,6 @@ have ways of interacting with a specific atom and control it. They posses a blac
 	TRACK_AI_DATUM_TARGET(thing, key)
 	TRACK_AI_DATUM_TARGET(value, key)
 	blackboard[key][thing] += value
-
 
 /**
  * Similar to [proc/add_blackboard_key_assoc], assuming key is intended to be a lazylist (so it will create a list)

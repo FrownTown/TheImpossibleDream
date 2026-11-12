@@ -50,7 +50,8 @@
 	aggressive = 1
 	ranged = FALSE
 
-	ai_controller = /datum/ai_controller/fae
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/fae
 
 /mob/living/simple_animal/hostile/retaliate/rogue/fae/dryad/Initialize(mapload)
 	src.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)

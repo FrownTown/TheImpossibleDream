@@ -50,7 +50,8 @@
 	dodgetime = 30
 	aggressive = 1
 
-	ai_controller = /datum/ai_controller/infernal
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/infernal
 	move_base_delay = MOVEMENT_DELAY_SLOW
 
 /mob/living/simple_animal/hostile/retaliate/rogue/infernal/fiend/Initialize(mapload)

@@ -1,4 +1,3 @@
-
 /mob/living/simple_animal/hostile/retaliate/rogue/chicken
 	icon = 'icons/roguetown/mob/monster/chicken.dmi'
 	name = "\improper chicken"
@@ -64,7 +63,8 @@
 //new ai, old ai off
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/generic
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/generic
 	move_base_delay = MOVEMENT_DELAY_SLOW
 
 /mob/living/simple_animal/hostile/retaliate/rogue/chicken/get_sound(input)
@@ -75,7 +75,6 @@
 			return 'sound/vo/mobs/chikn/death.ogg'
 		if("idle")
 			return pick('sound/vo/mobs/chikn/idle (1).ogg','sound/vo/mobs/chikn/idle (2).ogg','sound/vo/mobs/chikn/idle (3).ogg','sound/vo/mobs/chikn/idle (4).ogg','sound/vo/mobs/chikn/idle (5).ogg','sound/vo/mobs/chikn/idle (6).ogg')
-
 
 /mob/living/simple_animal/hostile/retaliate/rogue/chicken/simple_limb_hit(zone)
 	if(!zone)
@@ -118,7 +117,7 @@
 /mob/living/simple_animal/hostile/retaliate/rogue/chicken/Initialize(mapload)
 	. = ..()
 	AddElement(/datum/element/ai_retaliate)
-	ai_controller.set_blackboard_key(BB_BASIC_FOODS, typecacheof(food_type))
+	ai_bb_set(BB_BASIC_FOODS, typecacheof(food_type))
 	if(!body_color)
 		body_color = pick(validColors)
 	icon_state = "[icon_prefix]_[body_color]"
@@ -179,7 +178,6 @@
 				stop_automated_movement = TRUE
 				Goto(pick(foundnests))
 				addtimer(CALLBACK(src, PROC_REF(return_action)), 15 SECONDS)
-
 
 /obj/structure/fluff/nest
 	name = "nest"

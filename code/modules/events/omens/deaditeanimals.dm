@@ -65,20 +65,16 @@ GLOBAL_LIST_INIT(deadite_animal_migration_points, list())
 	var/mob/living/simple_animal/hostile/retaliate/rogue/animal = pick(animals)
 	for(var/i = 1 to rand(lower_limit, upper_limit))
 		var/mob/living/simple_animal/hostile/retaliate/rogue/created = new animal(spawn_turf)
-		if(created.ai_controller)
+		if(created.has_ai_brain())
 			var/list/migration_path = list()
-			var/list/ai_controller_paths = list()
 			for(var/turf/T in migration_turfs)
 				migration_path += WEAKREF(T)
-			for(var/datum/ai_planning_subtree/tree as anything in created.ai_controller.planning_subtrees)
-				ai_controller_paths |= tree.type
-			ai_controller_paths |=/datum/ai_planning_subtree/deadite_migration
-			created.ai_controller.replace_planning_subtrees(ai_controller_paths)
+			created.ai_append_subtree(/datum/ai_planning_subtree/deadite_migration)
 
 			// Set migration data
-			created.ai_controller.set_blackboard_key(BB_DEADITE_MIGRATION_PATH, migration_path)
-			created.ai_controller.set_blackboard_key(BB_DEADITE_MIGRATION_TARGET, start_turf)
-			created.ai_controller.set_blackboard_key(BB_DEADITE_TRAVEL_TARGET, start_turf)
+			created.ai_bb_set(BB_DEADITE_MIGRATION_PATH, migration_path)
+			created.ai_bb_set(BB_DEADITE_MIGRATION_TARGET, start_turf)
+			created.ai_bb_set(BB_DEADITE_TRAVEL_TARGET, start_turf)
 		else
 			//Fallback in cast a mob doesn't have an AI controller. This is bad, they should always have one if used here.
 			created.GiveTarget(end_turf)

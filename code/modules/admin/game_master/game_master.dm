@@ -454,8 +454,7 @@ GLOBAL_LIST_EMPTY(game_masters)
 			var/mob/living/simple_animal/simple_mob = spawned_mob
 			simple_mob.toggle_ai(AI_OFF)
 			simple_mob.can_have_ai = FALSE
-		if(spawned_mob.ai_controller)
-			QDEL_NULL(spawned_mob.ai_controller)
+		spawned_mob.ai_remove_brain()
 
 	return spawned_mob
 

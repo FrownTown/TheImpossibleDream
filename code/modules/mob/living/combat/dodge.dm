@@ -149,7 +149,7 @@
 	fixedeye = was_fixedeye
 	face_atom(target)
 	if(moved)
-		ai_controller?.advance_movement_cooldown()
+		ai_advance_movement_cooldown()
 	return TRUE
 
 /mob/proc/do_dodge(mob/user, turf/dodge_turf)
@@ -223,8 +223,6 @@
 				var/datum/intent/attacker_intent = attacker.used_intent
 				prob2defend = prob2defend - (attacker.get_wskill(attacker_intent?.masteritem, /datum/skill/combat/unarmed) * 10)
 				prob2defend = prob2defend + (defender_human.get_skill_level(/datum/skill/combat/unarmed) * 10)
-
-
 
 		if(HAS_TRAIT(user, TRAIT_CURSE_RAVOX))
 			prob2defend -= 40

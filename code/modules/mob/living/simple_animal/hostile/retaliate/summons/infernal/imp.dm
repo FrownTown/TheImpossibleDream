@@ -48,7 +48,8 @@
 	dodgetime = 30
 	aggressive = 1
 
-	ai_controller = /datum/ai_controller/infernal/harasser
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/infernal/harasser
 	move_base_delay = MOVEMENT_DELAY_SPD_17
 
 /mob/living/simple_animal/hostile/retaliate/rogue/infernal/imp/Initialize(mapload)
@@ -79,7 +80,6 @@
 	update_icon()
 	spawn(1)
 		qdel(src)
-
 
 /mob/living/simple_animal/hostile/retaliate/rogue/infernal/imp/taunted(mob/user)
 	emote("aggro")

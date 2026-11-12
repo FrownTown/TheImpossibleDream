@@ -22,7 +22,8 @@
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
 
-	ai_controller = /datum/ai_controller/assassin
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/assassin
 	move_base_delay = MOVEMENT_DELAY_SPD_10
 	melee_cooldown = MINOR_DREAMFIEND_ATTACK_SPEED
 	var/next_blink = 0
@@ -73,7 +74,8 @@
 	STASTR = 20
 	STAPER = 20
 
-	ai_controller = /datum/ai_controller/assassin/ancient
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/assassin/ancient
 	move_base_delay = MOVEMENT_DELAY_SPD_23
 	attack_sound = list('sound/mobs/abyssal/abyssal_attack.ogg','sound/mobs/abyssal/abyssal_attack2.ogg')
 
@@ -172,11 +174,11 @@
 	if(prob(25))
 		new /obj/effect/spawner/lootdrop/roguetown/abyssor(loc)
 	new /obj/effect/decal/cleanable/dreamfiend_ichor/large(loc)
-	var/main_target = ai_controller.blackboard[BB_MAIN_TARGET]
+	var/main_target = ai_bb_get(BB_MAIN_TARGET)
 	for(var/i in 1 to 2)
 		var/mob/living/simple_animal/hostile/rogue/dreamfiend/F = new(loc)
-		F.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, main_target)
-		F.ai_controller.set_blackboard_key(BB_MAIN_TARGET, main_target)
+		F.ai_bb_set(BB_BASIC_MOB_CURRENT_TARGET, main_target)
+		F.ai_bb_set(BB_MAIN_TARGET, main_target)
 	if(main_target)
 		src.visible_message(span_notice("some dreamfiends split forth front the body of the [src] following after [main_target]... countless teeth bared with hostility!"))
 	qdel(src)
@@ -220,12 +222,14 @@
 // EVENT mobs and mappable mobs. (USE SPARINGLY)
 /mob/living/simple_animal/hostile/rogue/dreamfiend/unbound
 	attack_sound = list('sound/mobs/abyssal/abyssal_attack.ogg','sound/mobs/abyssal/abyssal_attack2.ogg')
-	ai_controller = /datum/ai_controller/dreamfiend_unbound
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/dreamfiend_unbound
 	move_base_delay = MOVEMENT_DELAY_SPD_10
 
 /mob/living/simple_animal/hostile/rogue/dreamfiend/major/unbound
 	attack_sound = list('sound/mobs/abyssal/abyssal_attack.ogg','sound/mobs/abyssal/abyssal_attack2.ogg')
-	ai_controller = /datum/ai_controller/dreamfiend_unbound
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/dreamfiend_unbound
 	move_base_delay = MOVEMENT_DELAY_SPD_10
 
 /mob/living/simple_animal/hostile/rogue/dreamfiend/major/unbound/death()
@@ -239,5 +243,6 @@
 
 /mob/living/simple_animal/hostile/rogue/dreamfiend/ancient/unbound
 	attack_sound = list('sound/mobs/abyssal/abyssal_attack.ogg','sound/mobs/abyssal/abyssal_attack2.ogg')
-	ai_controller = /datum/ai_controller/dreamfiend_unbound_ancient
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/dreamfiend_unbound_ancient
 	move_base_delay = MOVEMENT_DELAY_SPD_10

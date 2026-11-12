@@ -27,19 +27,19 @@
 	if(!isliving(cast_on))
 		to_chat(owner, span_warning("That won't work."))
 		return FALSE
-	if(!spelltarget.mind && spelltarget.ai_controller)
-		spelltarget.ai_controller.set_blackboard_key(BB_BASIC_MOB_FLEE_TARGET, owner)
-		spelltarget.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, owner)
-		spelltarget.ai_controller.set_blackboard_key(BB_BASIC_MOB_FLEEING, TRUE)
-		spelltarget.ai_controller.CancelActions()
+	if(!spelltarget.mind && spelltarget.has_ai_brain())
+		spelltarget.ai_bb_set(BB_BASIC_MOB_FLEE_TARGET, owner)
+		spelltarget.ai_bb_set(BB_BASIC_MOB_CURRENT_TARGET, owner)
+		spelltarget.ai_bb_set(BB_BASIC_MOB_FLEEING, TRUE)
+		spelltarget.ai_cancel_actions()
 		addtimer(CALLBACK(src, PROC_REF(end_fear), spelltarget), 10 SECONDS)
 		return TRUE
 
 /datum/action/cooldown/spell/lamplighter/scare_beast/proc/end_fear(mob/living/target)
-	if(QDELETED(target) || !target.ai_controller)
+	if(QDELETED(target) || !target.has_ai_brain())
 		return
-	target.ai_controller.CancelActions()
-	target.ai_controller.set_blackboard_key(BB_BASIC_MOB_FLEEING, FALSE)
+	target.ai_cancel_actions()
+	target.ai_bb_set(BB_BASIC_MOB_FLEEING, FALSE)
 	return
 
 // Soothe the Soul
@@ -189,7 +189,6 @@
 		owner.balloon_alert_to_viewers("<font color='#FF4500'>blocked! [defend]/3</font>")
 		playsound(get_turf(owner), 'sound/combat/parry/deflect_6.ogg', 40, TRUE)
 		return COMPONENT_ITEM_NO_ATTACK
-
 
 /datum/status_effect/buff/bulwark_of_oil/proc/unarmed_defend(mob/living/parent, mob/living/attacker, mob/living/defender)
 	var/mob/living/H = attacker

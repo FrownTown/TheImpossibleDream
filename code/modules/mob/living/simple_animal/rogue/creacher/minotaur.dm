@@ -63,7 +63,8 @@
 //new ai, old ai off
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/minotaur
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/minotaur
 	move_base_delay = MOVEMENT_DELAY_SPD_17
 
 //	stat_attack = UNCONSCIOUS
@@ -74,7 +75,7 @@
 	update_icon()
 	ADD_TRAIT(src, TRAIT_NOPAINSTUN, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_BASHDOORS, TRAIT_GENERIC)
-	ai_controller.set_blackboard_key(BB_BASIC_FOODS, food_type)
+	ai_bb_set(BB_BASIC_FOODS, food_type)
 
 	var/datum/action/cooldown/spell/telegraphed_strike/mob_ability/minotaur_charge/charge = new(src)
 	charge.Grant(src)

@@ -54,7 +54,8 @@
 		/obj/item/alch/bone = 2,
 		/obj/item/alch/viscera = 1
 	)
-	ai_controller = /datum/ai_controller/undead
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/undead
 	move_base_delay = MOVEMENT_DELAY_LUMBERING
 	AIStatus = AI_OFF
 	can_have_ai = FALSE

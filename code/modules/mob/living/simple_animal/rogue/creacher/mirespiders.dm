@@ -53,7 +53,8 @@
 
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/mirespider
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/mirespider
 	move_base_delay = MOVEMENT_DELAY_SPD_17
 
 /mob/living/simple_animal/hostile/retaliate/rogue/mirespider/Initialize(mapload)
@@ -74,8 +75,8 @@
 		break
 	}
 
-	if(lurker && ai_controller)
-		ai_controller.set_blackboard_key(BB_FOLLOW_TARGET, lurker)
+	if(lurker && has_ai_brain())
+		ai_bb_set(BB_FOLLOW_TARGET, lurker)
 
 /mob/living/simple_animal/hostile/retaliate/rogue/mirespider/death(gibbed)
 	..()
@@ -155,7 +156,8 @@
 
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/mirespider_lurker
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/mirespider_lurker
 	move_base_delay = MOVEMENT_DELAY_SPD_17
 	projectiletype = /obj/projectile/bullet/spider
 
@@ -228,11 +230,11 @@
 		return
 
 	for (var/mob/living/simple_animal/hostile/retaliate/rogue/mirespider/follower in followers)
-		follower.ai_controller.clear_blackboard_key(BB_FOLLOW_TARGET)
-		follower.ai_controller.clear_blackboard_key(BB_TRAVEL_DESTINATION)
-		follower.ai_controller.clear_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET)
-		follower.ai_controller.clear_blackboard_key(BB_BASIC_MOB_RETALIATE_LIST)
-		follower.ai_controller.CancelActions()
+		follower.ai_bb_clear(BB_FOLLOW_TARGET)
+		follower.ai_bb_clear(BB_TRAVEL_DESTINATION)
+		follower.ai_bb_clear(BB_BASIC_MOB_CURRENT_TARGET)
+		follower.ai_bb_clear(BB_BASIC_MOB_RETALIATE_LIST)
+		follower.ai_cancel_actions()
 	followers.Cut()
 
 /mob/living/simple_animal/hostile/rogue/mirespider_paralytic
@@ -281,7 +283,8 @@
 
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/mirespider_paralytic
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/mirespider_paralytic
 	move_base_delay = MOVEMENT_DELAY_SPD_17
 
 /datum/intent/simple/bite/mirespider_paralytic

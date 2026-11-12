@@ -25,7 +25,8 @@
 	base_intents = list(/datum/intent/simple/bite/dragon_bite)
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/dragon
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/dragon
 	limb_destroyer = TRUE
 
 	STACON = 20

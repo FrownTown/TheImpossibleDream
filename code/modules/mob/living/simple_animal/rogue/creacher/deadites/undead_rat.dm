@@ -28,7 +28,8 @@
 	threat_point = THREAT_MODERATE
 	health = RAT_HEALTH_UNDEAD
 	maxHealth = RAT_HEALTH_UNDEAD
-	ai_controller = /datum/ai_controller/rat/undead
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/rat/undead
 	move_base_delay = MOVEMENT_DELAY_SLOW
 	undead_rat = TRUE
 
@@ -37,5 +38,6 @@
 	AddComponent(/datum/component/deadite, 4 MINUTES, "rat_downed", 0)
 
 /mob/living/simple_animal/hostile/retaliate/rogue/bigrat/undead/summoned
-	ai_controller = /datum/ai_controller/rat/undead/summoned
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/rat/undead/summoned
 	move_base_delay = MOVEMENT_DELAY_SLOW

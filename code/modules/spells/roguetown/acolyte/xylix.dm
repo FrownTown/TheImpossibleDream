@@ -21,7 +21,6 @@
 	revert_cast()
 	return FALSE
 
-
 /obj/effect/proc_holder/spell/invoked/mastersillusion
 	name = "Set Decoy"
 	desc = "Creates a body double of yourself and makes you invisible, after a delay your clone explodes into smoke."
@@ -75,8 +74,8 @@
 	footstep_type = FOOTSTEP_MOB_BAREFOOT
 	del_on_death = TRUE
 	loot = list(/obj/item/bomb/smoke/decoy)
-	ai_controller = /datum/ai_controller/rat/undead/summoned
-
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/rat/undead/summoned
 
 /obj/item/bomb/smoke/decoy/Initialize(mapload)
 	. = ..()
@@ -86,7 +85,6 @@
 /mob/living/simple_animal/hostile/rogue/xylixdouble/Initialize(mapload, mob/living/carbon/human/copycat)
 	. = ..()
 	addtimer(CALLBACK(src, TYPE_PROC_REF(/mob/living/simple_animal, death), TRUE), 7 SECONDS)
-
 
 /obj/effect/proc_holder/spell/self/xylixslip
 	name = "Xylixian Slip"
@@ -266,7 +264,6 @@
 	M.forceMove(src)
 	master = C
 	master.active_dummy = src
-
 
 /obj/effect/dummy/parlor_trick/Destroy()
 	if(master)

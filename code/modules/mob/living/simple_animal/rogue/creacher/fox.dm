@@ -72,7 +72,8 @@
 //new ai, old ai off
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/volf
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/volf
 	move_base_delay = MOVEMENT_DELAY_SPD_3
 	melee_cooldown = WOLF_ATTACK_SPEED
 
@@ -118,14 +119,13 @@
 			Retaliate()
 			GiveTarget(pulledby)
 
-
-
 /mob/living/simple_animal/hostile/retaliate/rogue/fox/guildpet
 	name = "Mimi the Fox"
 	desc = "An adorable creechur adopted by the Guild of Craft as their mascot."
 	density = 0 // You can walk through them
 	aggressive = FALSE
-	ai_controller = /datum/ai_controller/generic
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/generic
 	move_base_delay = MOVEMENT_DELAY_SLOW
 
 /mob/living/simple_animal/hostile/retaliate/rogue/fox/guildpet/get_sound(input)

@@ -35,7 +35,8 @@
 
 	can_have_ai = FALSE //disable native ai
 	AIStatus = AI_OFF
-	ai_controller = /datum/ai_controller/skeleton_ranged/event
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/skeleton_ranged/event
 	move_base_delay = MOVEMENT_DELAY_SPD_3
 	melee_cooldown = SKELETON_ATTACK_SPEED
 
@@ -165,7 +166,6 @@
 	if(istype(W, /obj/item/roguekey/psy_bog/two))
 		visible_message(span_boldannounce("The magical barrier disperses!"))
 		qdel(src)
-
 
 //Loot
 /obj/item/roguekey/psy_bog/exit

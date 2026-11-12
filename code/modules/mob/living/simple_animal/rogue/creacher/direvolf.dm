@@ -1,4 +1,3 @@
-
 //see volf.dm for parent animal
 /mob/living/simple_animal/hostile/retaliate/rogue/wolf/dire
 	anatomy_type = /datum/anatomy/quadruped/standard
@@ -53,7 +52,7 @@
 	if(prob(33))
 		gender = FEMALE
 	update_icon()
-	ai_controller.set_blackboard_key(BB_BASIC_FOODS, food_type)
+	ai_bb_set(BB_BASIC_FOODS, food_type)
 	var/color = pick("brown", "black", "white")
 	icon_state = "direvolf_[color]"
 	icon_living = "direvolf_[color]"
@@ -71,7 +70,6 @@
 			return pick('sound/vo/mobs/vw/idle (1).ogg','sound/vo/mobs/vw/idle (2).ogg','sound/vo/mobs/vw/idle (3).ogg','sound/vo/mobs/vw/idle (4).ogg')
 		if("cidle")
 			return pick('sound/vo/mobs/vw/bark (1).ogg','sound/vo/mobs/vw/bark (2).ogg','sound/vo/mobs/vw/bark (3).ogg','sound/vo/mobs/vw/bark (4).ogg','sound/vo/mobs/vw/bark (5).ogg','sound/vo/mobs/vw/bark (6).ogg','sound/vo/mobs/vw/bark (7).ogg')
-
 
 /obj/effect/decal/remains/direwolf
 	name = "remains"

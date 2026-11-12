@@ -22,11 +22,11 @@
 		//	continue
 		if(faction_check(animal.faction, scareable_factions))
 			animal.aggressive = FALSE
-			if(animal.ai_controller)
-				animal.ai_controller.clear_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET)
-				animal.ai_controller.clear_blackboard_key(BB_BASIC_MOB_RETALIATE_LIST)
-				animal.ai_controller.set_blackboard_key(BB_BASIC_MOB_FLEEING, TRUE)
-				animal.ai_controller.set_blackboard_key(BB_BASIC_MOB_NEXT_FLEEING, world.time + 10 SECONDS)
+			if(animal.has_ai_brain())
+				animal.ai_bb_clear(BB_BASIC_MOB_CURRENT_TARGET)
+				animal.ai_bb_clear(BB_BASIC_MOB_RETALIATE_LIST)
+				animal.ai_bb_set(BB_BASIC_MOB_FLEEING, TRUE)
+				animal.ai_bb_set(BB_BASIC_MOB_NEXT_FLEEING, world.time + 10 SECONDS)
 			user.emote("warcry")
 			to_chat(usr, "The [animal.name] flees from your bellow!")
 	return scared

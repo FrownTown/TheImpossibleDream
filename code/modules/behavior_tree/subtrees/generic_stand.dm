@@ -1,0 +1,15 @@
+/datum/behavior_tree/node/subtree/generic_stand/SelectBehaviors(datum/behavior_tree/node/parallel/root/controller, seconds_per_tick)
+	var/mob/living/living_pawn = controller.pawn
+
+	if(living_pawn.IsKnockdown() || living_pawn.IsStun() || living_pawn.IsParalyzed())
+		return
+
+	if(SHOULD_STAND(living_pawn) && SPT_PROB(50, seconds_per_tick) && !HAS_TRAIT(living_pawn, TRAIT_FLOORED) && !living_pawn.stat)
+		controller.queue_behavior(/bt_behavior/stand) //BRO IM ON FUCKING FIRE BRO
+		return SUBTREE_RETURN_FINISH_PLANNING //IM NOT DOING ANYTHING ELSE BUT EXTINGUISH MYSELF, GOOD GOD HAVE MERCY.
+
+
+/bt_behavior/stand/perform(seconds_per_tick, datum/behavior_tree/node/parallel/root/controller)
+	var/mob/living/carbon/human/living_pawn = controller.pawn
+	living_pawn.stand_up()
+	return AI_BEHAVIOR_INSTANT | AI_BEHAVIOR_SUCCEEDED

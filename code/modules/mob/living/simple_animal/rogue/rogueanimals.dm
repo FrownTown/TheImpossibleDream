@@ -1,5 +1,3 @@
-
-
 //these mobs run away when attacked
 /mob/living/simple_animal/hostile/retaliate/rogue
 	turns_per_move = 5
@@ -54,7 +52,7 @@
 	//If you cant act and dont have a player stop moving.
 	if(!can_act && !client)
 		return FALSE
-	..()
+	return ..()
 
 /mob/living/simple_animal/hostile/retaliate/rogue/apply_damage(damage = 0,damagetype = BRUTE, def_zone = null, blocked = FALSE, forced = FALSE)
 	..()

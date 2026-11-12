@@ -52,7 +52,8 @@
 	STASTR = 13
 	STASPD = 5
 
-	ai_controller = /datum/ai_controller/elemental
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/elemental
 
 /mob/living/simple_animal/hostile/retaliate/rogue/elemental/behemoth/Initialize(mapload)
 	src.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)

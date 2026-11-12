@@ -43,10 +43,10 @@
 /datum/ai_behavior/call_reinforcements/perform(seconds_per_tick, datum/ai_controller/controller)
 	var/mob/pawn_mob = controller.pawn
 	for(var/mob/other_mob in get_hearers_in_view(reinforcements_range, pawn_mob))
-		if(pawn_mob.faction_check_mob(target = other_mob, exact_match = FALSE) && !isnull(other_mob.ai_controller) && !other_mob.ai_controller.blackboard[BB_BASIC_MOB_TAMED])
+		if(pawn_mob.faction_check_mob(target = other_mob, exact_match = FALSE) && other_mob.has_ai_brain() && !other_mob.ai_bb_get(BB_BASIC_MOB_TAMED))
 			// Add our current target to their retaliate list so that they'll attack our aggressor
-			other_mob.ai_controller.insert_blackboard_key_lazylist(BB_BASIC_MOB_RETALIATE_LIST, controller.blackboard[BB_BASIC_MOB_CURRENT_TARGET])
-			other_mob.ai_controller.set_blackboard_key(BB_BASIC_MOB_REINFORCEMENT_TARGET, pawn_mob)
+			other_mob.ai_bb_insert_lazylist(BB_BASIC_MOB_RETALIATE_LIST, controller.blackboard[BB_BASIC_MOB_CURRENT_TARGET])
+			other_mob.ai_bb_set(BB_BASIC_MOB_REINFORCEMENT_TARGET, pawn_mob)
 
 	controller.set_blackboard_key(BB_BASIC_MOB_REINFORCEMENTS_COOLDOWN, world.time + REINFORCEMENTS_COOLDOWN)
 	return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_SUCCEEDED

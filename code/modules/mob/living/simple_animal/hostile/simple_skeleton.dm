@@ -41,7 +41,8 @@
 
 	can_have_ai = FALSE //disable native ai
 	AIStatus = AI_OFF
-	ai_controller = /datum/ai_controller/simple_skeleton
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/simple_skeleton
 	move_base_delay = MOVEMENT_DELAY_SPD_10
 	melee_cooldown = SKELETON_ATTACK_SPEED
 
@@ -69,7 +70,8 @@
 	icon_dead = ""
 	attack_sound = 'sound/foley/pierce.ogg'
 	loot = list(/obj/item/natural/bone,	/obj/item/natural/bone, /obj/item/natural/bone,	/obj/item/rogueweapon/spear, /obj/item/skull)
-	ai_controller = /datum/ai_controller/skeleton_spear
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/skeleton_spear
 	move_base_delay = MOVEMENT_DELAY_SPD_10
 
 /mob/living/simple_animal/hostile/rogue/skeleton/guard
@@ -106,7 +108,8 @@
 			/obj/item/ammo_casing/caseless/rogue/arrow/iron,
 			/obj/item/ammo_casing/caseless/rogue/arrow/iron,
 			)
-	ai_controller = /datum/ai_controller/skeleton_ranged
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/skeleton_ranged
 	move_base_delay = MOVEMENT_DELAY_SPD_3
 
 /mob/living/simple_animal/hostile/rogue/skeleton/get_sound(input)
@@ -189,7 +192,6 @@
 	cut_overlay("peace_overlay")
 	. = ..()
 
-
 /datum/intent/simple/claw/skeleton_unarmed
 	attack_verb = list("claws", "strikes", "punches")
 	blade_class = BCLASS_CHOP
@@ -218,19 +220,21 @@
 	chargetime = 1
 	animname = "stab"
 
-
-
 /mob/living/simple_animal/hostile/rogue/skeleton/axe/event
-	ai_controller = /datum/ai_controller/simple_skeleton/event
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/simple_skeleton/event
 	move_base_delay = MOVEMENT_DELAY_SPD_10
 /mob/living/simple_animal/hostile/rogue/skeleton/spear/event
-	ai_controller = /datum/ai_controller/skeleton_spear/event
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/skeleton_spear/event
 	move_base_delay = MOVEMENT_DELAY_SPD_10
 /mob/living/simple_animal/hostile/rogue/skeleton/guard/event
-	ai_controller = /datum/ai_controller/simple_skeleton/event
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/simple_skeleton/event
 	move_base_delay = MOVEMENT_DELAY_SPD_10
 /mob/living/simple_animal/hostile/rogue/skeleton/bow/event
-	ai_controller = /datum/ai_controller/skeleton_ranged/event
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/skeleton_ranged/event
 	move_base_delay = MOVEMENT_DELAY_SPD_3
 
 /mob/living/simple_animal/hostile/rogue/skeleton/axe/Initialize(mapload, mob/user, cabal_affine = FALSE, is_summoned = FALSE)

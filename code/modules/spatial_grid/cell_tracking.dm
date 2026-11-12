@@ -26,6 +26,16 @@
 	/// The width (x radius) of our outer window
 	var/outer_window_y_radius
 
+	var/last_z = 0
+	var/last_inner_min_x = 0
+	var/last_inner_max_x = 0
+	var/last_inner_min_y = 0
+	var/last_inner_max_y = 0
+	var/last_outer_min_x = 0
+	var/last_outer_max_x = 0
+	var/last_outer_min_y = 0
+	var/last_outer_max_y = 0
+
 /// Accepts a width and height to use for this tracker
 /// Also accepts the ratio to use between inner and outer window. Optional, defaults to 2
 /datum/cell_tracker/New(width, height, inner_outer_ratio)
@@ -49,6 +59,7 @@
 
 	outer_window_x_radius = x_radius * ratio
 	outer_window_y_radius = y_radius * ratio
+	last_z = 0
 
 /// Returns a list of newly and formerly joined spatial grid managed objects of type [type] in the form list(new, old)
 /// Takes the center of our window as input
@@ -88,6 +99,29 @@
 /datum/cell_tracker/proc/recalculate_cells(turf/center)
 	if(!center)
 		CRASH("/datum/cell_tracker had an invalid location on refresh, ya done fucked")
+	var/cells_x = SSspatial_grid.cells_on_x_axis
+	var/cells_y = SSspatial_grid.cells_on_y_axis
+	var/inner_min_x = max(GET_SPATIAL_INDEX(center.x - inner_window_x_radius), 1)
+	var/inner_max_x = min(GET_SPATIAL_INDEX(center.x + inner_window_x_radius), cells_x)
+	var/inner_min_y = max(GET_SPATIAL_INDEX(center.y - inner_window_y_radius), 1)
+	var/inner_max_y = min(GET_SPATIAL_INDEX(center.y + inner_window_y_radius), cells_y)
+	var/outer_min_x = max(GET_SPATIAL_INDEX(center.x - outer_window_x_radius), 1)
+	var/outer_max_x = min(GET_SPATIAL_INDEX(center.x + outer_window_x_radius), cells_x)
+	var/outer_min_y = max(GET_SPATIAL_INDEX(center.y - outer_window_y_radius), 1)
+	var/outer_max_y = min(GET_SPATIAL_INDEX(center.y + outer_window_y_radius), cells_y)
+	var/same_inner = inner_min_x == last_inner_min_x && inner_max_x == last_inner_max_x && inner_min_y == last_inner_min_y && inner_max_y == last_inner_max_y
+	var/same_outer = outer_min_x == last_outer_min_x && outer_max_x == last_outer_max_x && outer_min_y == last_outer_min_y && outer_max_y == last_outer_max_y
+	if(center.z == last_z && same_inner && same_outer)
+		return list(list(), list())
+	last_z = center.z
+	last_inner_min_x = inner_min_x
+	last_inner_max_x = inner_max_x
+	last_inner_min_y = inner_min_y
+	last_inner_max_y = inner_max_y
+	last_outer_min_x = outer_min_x
+	last_outer_max_x = outer_max_x
+	last_outer_min_y = outer_min_y
+	last_outer_max_y = outer_max_y
 	// This is a mild waste of cpu time. Consider optimizing by adding a new helper function to get just the space between two bounds
 	// Assuming it ever becomes a real problem
 	var/list/datum/spatial_grid_cell/inner_window = SSspatial_grid.get_cells_in_bounds(center, inner_window_x_radius, inner_window_y_radius)

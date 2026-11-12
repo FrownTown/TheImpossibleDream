@@ -64,11 +64,11 @@
 //	stat_attack = UNCONSCIOUS
 	remains_type = /obj/effect/decal/remains/mole
 
-
 //new ai, old ai off
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/mole
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/mole
 	move_base_delay = MOVEMENT_DELAY_SLOW
 
 /obj/effect/decal/remains/mole
@@ -85,7 +85,7 @@
 	if(prob(33))
 		gender = FEMALE
 	update_icon()
-	ai_controller.set_blackboard_key(BB_BASIC_FOODS, food_type)
+	ai_bb_set(BB_BASIC_FOODS, food_type)
 
 /mob/living/simple_animal/hostile/retaliate/rogue/mole/death(gibbed)
 	..()
@@ -115,8 +115,6 @@
 	if(pulledby)
 		Retaliate()
 		GiveTarget(pulledby)
-
-
 
 /datum/intent/simple/claw/mole
 	clickcd = MOLE_ATTACK_SPEED

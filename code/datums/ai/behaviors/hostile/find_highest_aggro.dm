@@ -94,9 +94,8 @@
 		if(QDELETED(pot_target) || pot_target.stat == DEAD)
 			continue
 		if(!targetting_datum.can_attack(living_mob, pot_target))
-			var/datum/ai_controller/ally_controller = pot_target.ai_controller
-			if(ally_controller && living_mob.faction_check_mob(pot_target, FALSE))
-				var/atom/ally_target = ally_controller.blackboard[BB_BASIC_MOB_CURRENT_TARGET]
+			if(pot_target.has_ai_brain() && living_mob.faction_check_mob(pot_target, FALSE))
+				var/atom/ally_target = pot_target.ai_bb_get(BB_BASIC_MOB_CURRENT_TARGET)
 				if(ally_target)
 					ally_focus[ally_target] += 1
 			continue

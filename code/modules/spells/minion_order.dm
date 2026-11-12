@@ -61,31 +61,32 @@
 	for(var/mob/other_mob in oview(order_range, owner))
 		if((istype(other_mob, /mob/living/simple_animal) || HAS_TRAIT(other_mob, TRAIT_CONJURED_SUMMON)) && !other_mob.client)
 			var/mob/living/minion = other_mob
-			if(!minion.ai_controller)
+			if(!minion.has_ai_brain())
 				continue
 
 			if((faction_ordering && owner.faction_check_mob(minion)) || (!faction_ordering && faction_tag && (faction_tag in minion.faction)))
-				minion.ai_controller.CancelActions()
-				minion.ai_controller.clear_blackboard_key(BB_FOLLOW_TARGET)
-				minion.ai_controller.clear_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET)
-				minion.ai_controller.clear_blackboard_key(BB_TRAVEL_DESTINATION)
-				minion.ai_controller.clear_blackboard_key(BB_BASIC_MOB_RETALIATE_LIST)
-				minion.ai_controller.clear_blackboard_key(BB_HIGHEST_THREAT_MOB)
-				minion.ai_controller.clear_blackboard_key(BB_CURRENT_PET_TARGET)
-				minion.ai_controller.blackboard[BB_MOB_AGGRO_TABLE] = list()
+				minion.ai_cancel_actions()
+				minion.ai_bb_clear(BB_FOLLOW_TARGET)
+				minion.ai_bb_clear(BB_BASIC_MOB_CURRENT_TARGET)
+				minion.ai_bb_clear(BB_TRAVEL_DESTINATION)
+				minion.ai_bb_clear(BB_BASIC_MOB_RETALIATE_LIST)
+				minion.ai_bb_clear(BB_HIGHEST_THREAT_MOB)
+				minion.ai_bb_clear(BB_CURRENT_PET_TARGET)
+				var/list/minion_bb = minion.ai_blackboard()
+				minion_bb[BB_MOB_AGGRO_TABLE] = list()
 				count += 1
 				switch(order_type)
 					if("goto")
-						minion.ai_controller.set_blackboard_key(BB_TRAVEL_DESTINATION, target_location)
+						minion.ai_bb_set(BB_TRAVEL_DESTINATION, target_location)
 						msg = "go to [target_location]."
 					if("follow")
-						minion.ai_controller.set_blackboard_key(BB_FOLLOW_TARGET, target)
+						minion.ai_bb_set(BB_FOLLOW_TARGET, target)
 						msg = "follow you."
 					if("aggressive")
 						msg = "act on their own."
 					if("attack")
-						minion.ai_controller.set_blackboard_key(BB_CURRENT_PET_TARGET, target)
-						minion.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, target)
+						minion.ai_bb_set(BB_CURRENT_PET_TARGET, target)
+						minion.ai_bb_set(BB_BASIC_MOB_CURRENT_TARGET, target)
 						msg = "attack [target.name] on sight."
 					if("toggle_stance")
 						if(minion == target)

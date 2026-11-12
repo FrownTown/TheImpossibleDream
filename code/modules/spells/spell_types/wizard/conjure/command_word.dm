@@ -199,8 +199,8 @@
 
 /datum/action/cooldown/spell/command_word/proc/summon_special(mob/living/summon, atom/aim)
 	var/atom/target = aim
-	if(!target && summon.ai_controller)
-		target = summon.ai_controller.blackboard[BB_BASIC_MOB_CURRENT_TARGET]
+	if(!target && summon.has_ai_brain())
+		target = summon.ai_bb_get(BB_BASIC_MOB_CURRENT_TARGET)
 	if(!target)
 		target = find_nearest_enemy(summon)
 	if(!target)
@@ -229,8 +229,8 @@
 
 /datum/action/cooldown/spell/command_word/proc/summon_guard(mob/living/summon, atom/aim)
 	var/atom/target = aim
-	if(!target && summon.ai_controller)
-		target = summon.ai_controller.blackboard[BB_BASIC_MOB_CURRENT_TARGET]
+	if(!target && summon.has_ai_brain())
+		target = summon.ai_bb_get(BB_BASIC_MOB_CURRENT_TARGET)
 	if(!target)
 		target = find_nearest_enemy(summon)
 	if(target)
@@ -245,8 +245,8 @@
 
 /datum/action/cooldown/spell/command_word/proc/summon_feint(mob/living/summon, atom/aim)
 	var/atom/target = aim
-	if(!target && summon.ai_controller)
-		target = summon.ai_controller.blackboard[BB_BASIC_MOB_CURRENT_TARGET]
+	if(!target && summon.has_ai_brain())
+		target = summon.ai_bb_get(BB_BASIC_MOB_CURRENT_TARGET)
 	if(!target)
 		target = find_nearest_enemy(summon)
 	if(!isliving(target))
@@ -258,8 +258,8 @@
 
 /datum/action/cooldown/spell/command_word/proc/summon_kick(mob/living/summon, atom/aim)
 	var/atom/target = aim
-	if(!target && summon.ai_controller)
-		target = summon.ai_controller.blackboard[BB_BASIC_MOB_CURRENT_TARGET]
+	if(!target && summon.has_ai_brain())
+		target = summon.ai_bb_get(BB_BASIC_MOB_CURRENT_TARGET)
 	if(!target)
 		target = find_nearest_enemy(summon)
 	if(!isliving(target) || !summon.Adjacent(target))
@@ -285,13 +285,13 @@
 	var/zone = user.zone_selected
 	var/count = 0
 	for(var/mob/living/summon in summons)
-		if(!summon.ai_controller)
+		if(!summon.has_ai_brain())
 			continue
 		if(focusing)
-			summon.ai_controller.set_blackboard_key(BB_FORCED_ATTACK_ZONE, zone)
+			summon.ai_bb_set(BB_FORCED_ATTACK_ZONE, zone)
 			summon.balloon_alert_to_viewers("<font color='[modes[current_mode]["color"]]'>focus!</font>")
 		else
-			summon.ai_controller.clear_blackboard_key(BB_FORCED_ATTACK_ZONE)
+			summon.ai_bb_clear(BB_FORCED_ATTACK_ZONE)
 		count++
 	if(!count)
 		return TRUE
@@ -427,11 +427,11 @@
 				summon.forceMove(landing)
 		summon.balloon_alert_to_viewers("<font color='#e0a020'>taunt!</font>")
 		summon.emote("warcry")
-		if(summon.ai_controller)
+		if(summon.has_ai_brain())
 			var/mob/living/foe = find_nearest_enemy(summon)
 			if(foe)
-				summon.ai_controller.set_blackboard_key(BB_CURRENT_PET_TARGET, foe)
-				summon.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, foe)
+				summon.ai_bb_set(BB_CURRENT_PET_TARGET, foe)
+				summon.ai_bb_set(BB_BASIC_MOB_CURRENT_TARGET, foe)
 		if(isanimal(summon))
 			var/mob/living/simple_animal/SA = summon
 			SA.pet_passive = FALSE

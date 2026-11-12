@@ -50,11 +50,11 @@
 	aggressive = 1
 	remains_type = null
 
-	ai_controller = /datum/ai_controller/headless
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/headless
 	move_base_delay = MOVEMENT_DELAY_SLOW
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-
 
 /mob/living/simple_animal/hostile/retaliate/rogue/headless/Initialize(mapload)
 	. = ..()

@@ -1038,8 +1038,6 @@ GLOBAL_DATUM_INIT(_corpse_sort_ref, /mob, null)
 	invocations = list("Awaken, rancor!!")
 	invocation_type = "shout"
 
-
-
 /obj/effect/proc_holder/spell/invoked/raise_spirits_vengeance/cast(list/targets, mob/living/user)
 	. = ..()
 
@@ -1059,7 +1057,7 @@ GLOBAL_DATUM_INIT(_corpse_sort_ref, /mob, null)
 			new /mob/living/simple_animal/hostile/rogue/spirit_vengeance(get_step(user, NORTH),user)
 			new /mob/living/simple_animal/hostile/rogue/spirit_vengeance(get_step(user, SOUTH),user)
 		for(var/mob/living/simple_animal/hostile/rogue/spirit_vengeance/swarm in view(2, user))
-			swarm.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, target)
+			swarm.ai_bb_set(BB_BASIC_MOB_CURRENT_TARGET, target)
 		return TRUE
 	revert_cast()
 	return FALSE

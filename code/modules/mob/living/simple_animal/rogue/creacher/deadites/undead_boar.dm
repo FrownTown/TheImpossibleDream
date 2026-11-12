@@ -8,7 +8,8 @@
 	icon_dead = "boar_dead"
 	health = BOAR_HEALTH_UNDEAD
 	maxHealth = BOAR_HEALTH_UNDEAD
-	ai_controller = /datum/ai_controller/boar/undead
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/boar/undead
 	move_base_delay = MOVEMENT_DELAY_SLOW
 	charge_type = /datum/action/cooldown/spell/telegraphed_strike/mob_ability/boar_charge/undead
 

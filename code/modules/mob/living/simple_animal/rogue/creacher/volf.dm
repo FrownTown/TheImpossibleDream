@@ -1,5 +1,3 @@
-
-
 /mob/living/simple_animal/hostile/retaliate/rogue/wolf
 	attack_aim = MOB_AIM_LOW
 	anatomy_type = /datum/anatomy/quadruped/trash
@@ -74,7 +72,8 @@
 //new ai, old ai off
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/volf
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/volf
 	move_base_delay = MOVEMENT_DELAY_SPD_3
 	melee_cooldown = WOLF_ATTACK_SPEED
 
@@ -98,7 +97,6 @@
 				C.visible_message(span_danger("\The [src] fails to drag \the [C] down!"))
 			chomp_cd = world.time //this goes here i think? ...sure
 
-
 /obj/effect/decal/remains/wolf
 	name = "remains"
 	desc = "Whether by starvation, disease, inter-pack conflict, or an unlucky kick from a saiga, this volf has died."
@@ -114,12 +112,11 @@
 	if(prob(33))
 		gender = FEMALE
 	update_icon()
-	ai_controller.set_blackboard_key(BB_BASIC_FOODS, food_type)
+	ai_bb_set(BB_BASIC_FOODS, food_type)
 	var/color = pick("brown", "black", "white")
 	icon_state = "volf_[color]"
 	icon_living = "volf_[color]"
 	icon_dead = "volf_[color]_dead"
-
 
 /mob/living/simple_animal/hostile/retaliate/rogue/wolf/death(gibbed)
 	..()
@@ -161,7 +158,6 @@
 	if(pulledby)
 		Retaliate()
 		GiveTarget(pulledby)
-
 
 /datum/intent/simple/bite/volf
 	clickcd = WOLF_ATTACK_SPEED

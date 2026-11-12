@@ -24,17 +24,18 @@
 
 	var/mob/living/living_mob = parent
 	living_mob.AddElement(/datum/element/relay_attackers)
-	if(!living_mob.ai_controller)
+	if(!living_mob.has_ai_brain())
 		return COMPONENT_INCOMPATIBLE
 
 	// Initialize the aggro table
-	living_mob.ai_controller.blackboard[BB_MOB_AGGRO_TABLE] = list()
+	var/list/_bb = living_mob.ai_blackboard()
+	_bb[BB_MOB_AGGRO_TABLE] = list()
 
 	// Set configurable parameters
 	src.decay_rate = decay_rate || default_decay_rate
-	living_mob.ai_controller.set_blackboard_key(BB_THREAT_THRESHOLD, threat_threshold || default_threat_threshold)
-	living_mob.ai_controller.set_blackboard_key(BB_AGGRO_RANGE, aggro_range || default_aggro_range)
-	living_mob.ai_controller.set_blackboard_key(BB_AGGRO_MAINTAIN_RANGE, maintain_range || default_maintain_range)
+	living_mob.ai_bb_set(BB_THREAT_THRESHOLD, threat_threshold || default_threat_threshold)
+	living_mob.ai_bb_set(BB_AGGRO_RANGE, aggro_range || default_aggro_range)
+	living_mob.ai_bb_set(BB_AGGRO_MAINTAIN_RANGE, maintain_range || default_maintain_range)
 
 	START_PROCESSING(SSaggro, src)
 	// Register signals
@@ -65,7 +66,7 @@
 	if(!target || !parent || target == parent)
 		return
 	var/mob/living/living_mob = parent
-	var/list/aggro_table = living_mob.ai_controller.blackboard[BB_MOB_AGGRO_TABLE]
+	var/list/aggro_table = living_mob.ai_bb_get(BB_MOB_AGGRO_TABLE)
 	if(!length(aggro_table))
 		add_threat(living_mob, target, amount)
 		return
@@ -79,7 +80,7 @@
 /datum/component/ai_aggro_system/proc/on_attacked(mob/victim, atom/attacker, damage)
 	SIGNAL_HANDLER
 
-	if(!victim.ai_controller)
+	if(!victim.has_ai_brain())
 		return
 
 	if(!ismob(attacker))
@@ -89,7 +90,7 @@
 		return
 
 	var/mob/mob_attacker = attacker
-	if(mob_attacker.ai_controller && victim.faction_check_mob(mob_attacker))
+	if(mob_attacker.has_ai_brain() && victim.faction_check_mob(mob_attacker))
 		AI_THINK(victim, "AGGRO: ignored friendly fire from faction-mate [attacker]")
 		return
 
@@ -100,36 +101,37 @@
 	if(damage)
 		threat_to_add += damage * 0.5
 
-	var/mob/current_focus = victim.ai_controller.blackboard[BB_HIGHEST_THREAT_MOB]
+	var/mob/current_focus = victim.ai_bb_get(BB_HIGHEST_THREAT_MOB)
 	if(current_focus && current_focus != attacker)
 		threat_to_add *= peel_bonus
 
 	AI_THINK(victim, "AGGRO: +[threat_to_add] from [attacker]")
 	add_threat(victim, attacker, threat_to_add)
 
-	victim.ai_controller.wake_for_combat()
+	victim.ai_wake_for_combat()
 
 /// Clears the aggro table when the mob dies
 /datum/component/ai_aggro_system/proc/on_death(mob/living/source)
 	SIGNAL_HANDLER
 
-	if(!source.ai_controller)
+	if(!source.has_ai_brain())
 		return
 
 	// Clear aggro table on death
-	source.ai_controller.blackboard[BB_MOB_AGGRO_TABLE] = list()
-	source.ai_controller.clear_blackboard_key(BB_HIGHEST_THREAT_MOB)
+	var/list/_bb = source.ai_blackboard()
+	_bb[BB_MOB_AGGRO_TABLE] = list()
+	source.ai_bb_clear(BB_HIGHEST_THREAT_MOB)
 
 /// Adds or modifies threat level for a specific mob
 /datum/component/ai_aggro_system/proc/add_threat(mob/victim, mob/attacker, amount)
-	if(!victim?.ai_controller || !attacker)
+	if(!victim?.has_ai_brain() || !attacker)
 		return
 	if(attacker == victim)
 		return
 	if(victim.faction_check_mob(attacker))
 		return
 
-	var/list/aggro_table = victim.ai_controller.blackboard[BB_MOB_AGGRO_TABLE]
+	var/list/aggro_table = victim.ai_bb_get(BB_MOB_AGGRO_TABLE)
 	if(!aggro_table)
 		aggro_table = list()
 
@@ -142,14 +144,15 @@
 	aggro_table[attacker] = clamp(aggro_table[attacker], 0, threat_cap)
 
 	// Update the aggro table
-	victim.ai_controller.blackboard[BB_MOB_AGGRO_TABLE] = aggro_table
+	var/list/_bb = victim.ai_blackboard()
+	_bb[BB_MOB_AGGRO_TABLE] = aggro_table
 
-	if(!victim.ai_controller.blackboard[BB_BASIC_MOB_CURRENT_TARGET])
-		victim.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, attacker)
+	if(!victim.ai_bb_get(BB_BASIC_MOB_CURRENT_TARGET))
+		victim.ai_bb_set(BB_BASIC_MOB_CURRENT_TARGET, attacker)
 
 	// Any threat addition should wake the AI - otherwise NPCs that get aggro
 	// via call_for_help, proximity scans, or provocation miracles stay stuck staring.
-	victim.ai_controller.wake_for_combat()
+	victim.ai_wake_for_combat()
 
 	// Update highest threat mob
 	update_highest_threat(victim)
@@ -158,10 +161,10 @@
 /datum/component/ai_aggro_system/process()
 	var/decay_amount = decay_rate || default_decay_rate
 	var/mob/living/living_mob = parent
-	if(!living_mob?.ai_controller)
+	if(!living_mob?.has_ai_brain())
 		return
 
-	var/list/aggro_table = living_mob.ai_controller.blackboard[BB_MOB_AGGRO_TABLE]
+	var/list/aggro_table = living_mob.ai_bb_get(BB_MOB_AGGRO_TABLE)
 	if(!aggro_table || !length(aggro_table))
 		return
 
@@ -180,22 +183,23 @@
 		aggro_table -= threat_mob
 
 	// Update the aggro table
-	living_mob.ai_controller.blackboard[BB_MOB_AGGRO_TABLE] = aggro_table
+	var/list/_bb = living_mob.ai_blackboard()
+	_bb[BB_MOB_AGGRO_TABLE] = aggro_table
 
 	// Update highest threat mob
 	update_highest_threat(living_mob)
 
 	if(!length(aggro_table))
-		living_mob.ai_controller.recalculate_idle()
+		living_mob.ai_recalculate_idle()
 
 /// Updates who the highest threat mob is
 /datum/component/ai_aggro_system/proc/update_highest_threat(mob/living/source)
-	if(!source?.ai_controller)
+	if(!source?.has_ai_brain())
 		return
 
-	var/list/aggro_table = source.ai_controller.blackboard[BB_MOB_AGGRO_TABLE]
+	var/list/aggro_table = source.ai_bb_get(BB_MOB_AGGRO_TABLE)
 	if(!aggro_table || !length(aggro_table))
-		source.ai_controller.clear_blackboard_key(BB_HIGHEST_THREAT_MOB)
+		source.ai_bb_clear(BB_HIGHEST_THREAT_MOB)
 		return
 
 	var/highest_threat = 0
@@ -207,7 +211,7 @@
 			highest_threat = aggro_table[threat_mob]
 			highest_threat_mob = threat_mob
 
-	var/mob/current_focus = source.ai_controller.blackboard[BB_HIGHEST_THREAT_MOB]
+	var/mob/current_focus = source.ai_bb_get(BB_HIGHEST_THREAT_MOB)
 	if(current_focus && current_focus != highest_threat_mob && !QDELETED(current_focus) && current_focus.stat != DEAD)
 		var/focus_threat = aggro_table[current_focus]
 		if(focus_threat && highest_threat < focus_threat + switch_margin)
@@ -215,9 +219,9 @@
 			highest_threat_mob = current_focus
 
 	// Update highest threat mob if it meets threshold
-	var/threat_threshold = source.ai_controller.blackboard[BB_THREAT_THRESHOLD] || default_threat_threshold
+	var/threat_threshold = source.ai_bb_get(BB_THREAT_THRESHOLD) || default_threat_threshold
 	if(highest_threat >= threat_threshold)
-		source.ai_controller.set_blackboard_key(BB_HIGHEST_THREAT_MOB, highest_threat_mob)
+		source.ai_bb_set(BB_HIGHEST_THREAT_MOB, highest_threat_mob)
 		SEND_SIGNAL(source, COMSIG_AI_GENERAL_CHANGE, "Threat Changed: [highest_threat_mob]")
 	else
-		source.ai_controller.clear_blackboard_key(BB_HIGHEST_THREAT_MOB)
+		source.ai_bb_clear(BB_HIGHEST_THREAT_MOB)

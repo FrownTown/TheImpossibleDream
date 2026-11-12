@@ -49,7 +49,8 @@
 	STASTR = 8
 	STASPD = 8
 
-	ai_controller = /datum/ai_controller/elemental
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/elemental
 	move_base_delay = MOVEMENT_DELAY_SPD_3
 
 /mob/living/simple_animal/hostile/retaliate/rogue/elemental/crawler/Initialize(mapload)

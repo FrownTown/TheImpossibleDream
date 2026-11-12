@@ -28,7 +28,6 @@ It will also call down lightning strikes from the sky, and fling people with it'
 #define SWOOP_DAMAGEABLE 1
 #define SWOOP_INVULNERABLE 2
 
-
 /mob/living/simple_animal/hostile/retaliate/rogue/voiddragon/proc/SetRecoveryTime(buffer_time)
 	recovery_time = world.time + buffer_time
 	ranged_cooldown = world.time + buffer_time
@@ -272,7 +271,6 @@ It will also call down lightning strikes from the sky, and fling people with it'
 
 		var/turf/picked = pick(turflist)
 
-
 		var/spawnTypes = pick_n_take(spawnLists)
 		new spawnTypes(picked)
 		reinforcement_count--
@@ -444,8 +442,6 @@ It will also call down lightning strikes from the sky, and fling people with it'
 		return FALSE
 	return ..()
 
-
-
 /mob/living/simple_animal/hostile/retaliate/rogue/voiddragon/AttackingTarget()
 	if(!swooping)
 		return ..()
@@ -459,7 +455,7 @@ It will also call down lightning strikes from the sky, and fling people with it'
 		to_chat(src,span_warning("You're currently bound and unable to move!"))
 		return
 	if(!swooping)
-		..()
+		return ..()
 
 /mob/living/simple_animal/hostile/retaliate/rogue/voiddragon/Goto(target, minimum_distance)
 	if(!swooping)
@@ -513,7 +509,6 @@ It will also call down lightning strikes from the sky, and fling people with it'
 
 /obj/effect/temp_visual/drakewall/CanAtmosPass(direction)
 	return !density
-
 
 /obj/effect/temp_visual/dragon_swoop
 	name = "certain death"

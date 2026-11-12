@@ -5,10 +5,10 @@
 	icon = 'icons/roguetown/mob/monster/trolls/troll_cave.dmi'
 	health = CAVETROLL_HEALTH
 	maxHealth = CAVETROLL_HEALTH
-	ai_controller = /datum/ai_controller/troll_cave
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/troll_cave
 	move_base_delay = MOVEMENT_DELAY_SPD_17
 	head_butcher = /obj/item/natural/head/troll/cave
-
 
 /mob/living/simple_animal/hostile/retaliate/rogue/troll/cave/Initialize(mapload)
 	. = ..()
@@ -21,7 +21,6 @@
 	..()
 	if(stat != DEAD)
 		hide()
-
 
 /mob/living/simple_animal/hostile/retaliate/rogue/troll/cave/GiveTarget()
 	..()

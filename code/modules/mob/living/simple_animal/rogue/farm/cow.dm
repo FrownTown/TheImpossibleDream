@@ -1,4 +1,3 @@
-
 /mob/living/simple_animal/hostile/retaliate/rogue/cow
 	icon = 'icons/roguetown/mob/monster/cow.dmi'
 	name = "cow"
@@ -45,7 +44,8 @@
 //new ai, old ai off
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/generic
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/generic
 	move_base_delay = MOVEMENT_DELAY_SLOW
 
 /obj/effect/decal/remains/cow
@@ -64,7 +64,6 @@
 			return pick('sound/vo/mobs/cow/death (1).ogg','sound/vo/mobs/cow/death (2).ogg')
 		if("idle")
 			return pick('sound/vo/mobs/cow/idle (1).ogg','sound/vo/mobs/cow/idle (2).ogg','sound/vo/mobs/cow/idle (3).ogg','sound/vo/mobs/cow/idle (4).ogg','sound/vo/mobs/cow/idle (5).ogg')
-
 
 /mob/living/simple_animal/hostile/retaliate/rogue/cow/cowlet
 	name = "calf"
@@ -185,7 +184,8 @@
 	//new ai, old ai off
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/generic
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/generic
 	move_base_delay = MOVEMENT_DELAY_SLOW
 
 /mob/living/simple_animal/hostile/retaliate/rogue/bull/get_sound(input)
@@ -253,7 +253,7 @@
 /mob/living/simple_animal/hostile/retaliate/rogue/bull/Initialize(mapload)
 	. = ..()
 	AddElement(/datum/element/ai_retaliate)
-	ai_controller.set_blackboard_key(BB_BASIC_FOODS, typecacheof(food_type))
+	ai_bb_set(BB_BASIC_FOODS, typecacheof(food_type))
 
 /mob/living/simple_animal/hostile/retaliate/rogue/cow/bullet
 	name = "calf"
@@ -279,6 +279,5 @@
 /mob/living/simple_animal/hostile/retaliate/rogue/cow/Initialize(mapload)
 	. = ..()
 	AddElement(/datum/element/ai_retaliate)
-	ai_controller.set_blackboard_key(BB_BASIC_FOODS, typecacheof(food_type))
-
+	ai_bb_set(BB_BASIC_FOODS, typecacheof(food_type))
 

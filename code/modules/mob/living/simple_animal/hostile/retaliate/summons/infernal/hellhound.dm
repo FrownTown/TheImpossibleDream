@@ -1,4 +1,3 @@
-
 /mob/living/simple_animal/hostile/retaliate/rogue/infernal/hellhound
 	anatomy_type = /datum/anatomy/quadruped/standard/hellhound
 	threat_point = THREAT_MODERATE
@@ -49,7 +48,8 @@
 	dodgetime = 30
 	aggressive = 1
 
-	ai_controller = /datum/ai_controller/infernal/hound
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/infernal/hound
 	move_base_delay = MOVEMENT_DELAY_SPD_17
 
 	var/scorch_cooldown = 10 SECONDS

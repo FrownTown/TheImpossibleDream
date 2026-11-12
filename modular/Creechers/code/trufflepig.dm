@@ -5,7 +5,6 @@
  *													*
  * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-
 //	........	Dirt changes	................
 /turf/open/floor/rogue/dirt //truffles, var needed for the sniffing function
 	var/hidden_truffles
@@ -37,7 +36,6 @@
 					new /obj/item/reagent_containers/food/snacks/rogue/toxicshrooms(get_turf(src))
 					hidden_toxicshrooms = FALSE
 	else ..()
-
 
 //	........	Truffles	................
 /obj/item/reagent_containers/food/snacks/rogue/truffles
@@ -147,8 +145,8 @@
 	//new ai, old ai off
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/generic
-
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/generic
 
 /obj/effect/decal/remains/pig
 	name = "remains"
@@ -173,7 +171,7 @@
 /mob/living/simple_animal/hostile/retaliate/rogue/trufflepig/Initialize(mapload)
 	. = ..()
 	AddElement(/datum/element/ai_retaliate)
-	ai_controller.set_blackboard_key(BB_BASIC_FOODS, food_type)
+	ai_bb_set(BB_BASIC_FOODS, food_type)
 
 /mob/living/simple_animal/hostile/retaliate/rogue/trufflepig/attack_hand(mob/living/carbon/human/M)
 	. = ..()
@@ -226,7 +224,6 @@
 			qdel(O)
 	else
 		return ..()
-
 
 //	........	Truffle Search	................
 /mob/living/simple_animal/hostile/retaliate/rogue/trufflepig/proc/trufflesearch(turf/T, range = world.view)

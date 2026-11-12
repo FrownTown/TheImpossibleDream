@@ -32,7 +32,8 @@
 	del_on_death = TRUE
 	can_have_ai = FALSE //disable native ai
 	AIStatus = AI_OFF
-	ai_controller = /datum/ai_controller/spirit_vengeance
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/spirit_vengeance
 	move_base_delay = MOVEMENT_DELAY_SPD_23
 	melee_cooldown = SKELETON_ATTACK_SPEED
 
@@ -53,5 +54,4 @@
 	. = ..()
 	AddComponent(/datum/component/ai_aggro_system)
 	addtimer(CALLBACK(src, TYPE_PROC_REF(/mob/living/simple_animal, death), TRUE), 30 SECONDS)
-
 

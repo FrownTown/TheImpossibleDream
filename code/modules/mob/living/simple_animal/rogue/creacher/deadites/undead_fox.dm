@@ -9,7 +9,8 @@
 	icon_dead = "fox_dead"
 	health = FOX_HEALTH_UNDEAD
 	maxHealth = FOX_HEALTH_UNDEAD
-	ai_controller = /datum/ai_controller/undead/fox
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/undead/fox
 	move_base_delay = MOVEMENT_DELAY_SPD_10
 	head_butcher = /obj/item/natural/head/fox/undead
 	botched_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat_rotten = 1, /obj/item/alch/viscera = 1, /obj/item/natural/bone = 3)

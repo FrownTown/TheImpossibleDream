@@ -52,14 +52,15 @@
 
 	can_have_ai = FALSE //disable native ai
 	AIStatus = AI_OFF
-	ai_controller = /datum/ai_controller/mossback
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/mossback
 	move_base_delay = MOVEMENT_DELAY_LUMBERING
 	melee_cooldown = MOSSBACK_ATTACK_SPEED
 
 /mob/living/simple_animal/hostile/retaliate/rogue/mossback/Initialize(mapload, mob/user, townercrab = FALSE)
 	. = ..()
 	AddComponent(/datum/component/ai_aggro_system)
-	ai_controller.set_blackboard_key(BB_BASIC_FOODS, food_type)
+	ai_bb_set(BB_BASIC_FOODS, food_type)
 	if(user)
 		summoner = user.mind.current.real_name
 		if (townercrab)

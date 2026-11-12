@@ -1,4 +1,3 @@
-
 /datum/action/cooldown/spell/tame_undead
 	name = "Tame Undead"
 	desc = "Oftentymes, husks and shamblers walk aimlessly - uncertain of their future. They need not look further, any longer.\nRequires the target to be within four tiles. Works on undead animals, too."
@@ -41,9 +40,8 @@
 
 	target.faction |= list("cabal", "[owner.mind.current.real_name]_faction")
 	target.visible_message(span_notice("[target] turns its head to pay heed to [owner]!"))
-	if(!target.ai_controller)
-		target.ai_controller = /datum/ai_controller/undead
-		target.InitializeAIController()
+	if(!target.has_ai_brain())
+		target.ai_give_brain(/datum/ai_controller/undead)
 		if(issimple(target))
 			var/mob/living/simple_animal/simple_target = target
 			simple_target.tamed()

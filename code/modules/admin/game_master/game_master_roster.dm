@@ -45,7 +45,6 @@ GLOBAL_LIST_INIT(gm_roster_path_stopwords, list(
 	"npc",
 ))
 
-
 /proc/sorted_keys(list/source)
 	var/list/keys = list()
 	for(var/key in source)
@@ -118,6 +117,9 @@ GLOBAL_LIST_INIT(gm_roster_path_stopwords, list(
 				tag = archetype.faction_tag
 		var/explicit = override_name || override_category || threat > 0 || tag
 		var/has_ai = initial(mob_type.ai_controller)
+		if(!has_ai && ispath(mob_type, /mob/living/simple_animal))
+			var/mob/living/simple_animal/tree_type = mob_type
+			has_ai = initial(tree_type.bt_tree)
 
 		if(!explicit)
 			if(!has_ai && !ispath(mob_type, /mob/living/simple_animal))

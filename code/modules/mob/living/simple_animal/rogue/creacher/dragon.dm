@@ -67,7 +67,8 @@
 
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/dragon
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/dragon
 	move_base_delay = MOVEMENT_DELAY_SPD_17
 
 	limb_destroyer = TRUE

@@ -1,4 +1,3 @@
-
 SUBSYSTEM_DEF(mobs)
 	name = "Mobs (Alive)"
 	priority = FIRE_PRIORITY_MOBS
@@ -11,11 +10,10 @@ SUBSYSTEM_DEF(mobs)
 	var/static/list/cubemonkeys = list()
 	var/alive_mobs = 0
 
-
 /datum/controller/subsystem/mobs/stat_entry()
-	var/active = LAZYLEN(GLOB.ai_controllers_by_status[AI_STATUS_ON])
-	var/idle = LAZYLEN(GLOB.ai_controllers_by_status[AI_STATUS_IDLE])
-	var/off = LAZYLEN(GLOB.ai_controllers_by_status[AI_STATUS_OFF])
+	var/active = LAZYLEN(GLOB.ai_controllers_by_status[AI_STATUS_ON]) + length(GLOB.planners_by_status[AI_STATUS_ON])
+	var/idle = LAZYLEN(GLOB.ai_controllers_by_status[AI_STATUS_IDLE]) + length(GLOB.planners_by_status[AI_STATUS_IDLE])
+	var/off = LAZYLEN(GLOB.ai_controllers_by_status[AI_STATUS_OFF]) + length(GLOB.planners_by_status[AI_STATUS_OFF])
 	var/players = GLOB.clients.len
 	var/npc_humans = GLOB.human_list.len - players
 	var/simple = GLOB.mob_living_list.len - GLOB.human_list.len
@@ -41,7 +39,6 @@ SUBSYSTEM_DEF(mobs)
 //		clients_by_zlevel[clients_by_zlevel.len] = list()
 		dead_players_by_zlevel.len--
 //		dead_players_by_zlevel[dead_players_by_zlevel.len] = list()
-
 
 /datum/controller/subsystem/mobs/fire(resumed = 0)
 	var/seconds = wait * 0.1

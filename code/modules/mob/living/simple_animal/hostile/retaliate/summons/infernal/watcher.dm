@@ -48,7 +48,8 @@
 	dodgetime = 30
 	aggressive = 1
 //	stat_attack = UNCONSCIOUS
-	ai_controller = /datum/ai_controller/infernal/harasser
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/infernal/harasser
 	move_base_delay = MOVEMENT_DELAY_SPD_10
 
 /mob/living/simple_animal/hostile/retaliate/rogue/infernal/watcher/Initialize(mapload)

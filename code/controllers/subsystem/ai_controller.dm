@@ -44,6 +44,9 @@ SUBSYSTEM_DEF(ai_controllers)
 		if(!LAZYLEN(ai_controller.current_behaviors)) //Still no plan
 			COOLDOWN_START(ai_controller, failed_planning_cooldown, AI_FAILED_PLANNING_COOLDOWN)
 
+	for(var/datum/behavior_tree/node/parallel/root/root as anything in GLOB.planners_by_status[planning_status])
+		root.plan_tick(wait * 0.1)
+
 	our_cost = MC_AVERAGE(our_cost, TICK_DELTA_TO_MS(TICK_USAGE_REAL - timer))
 
 #undef AI_STATUS_OFF_MAX_TIME

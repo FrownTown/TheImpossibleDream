@@ -521,7 +521,6 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 					else
 						emote("me", 2, pick(emote_hear))
 
-
 /mob/living/simple_animal/proc/environment_is_safe(check_temp = FALSE)
 	. = TRUE
 
@@ -534,7 +533,6 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 		var/areatemp = cur_turf.temperature
 		if((areatemp < minbodytemp) || (areatemp > maxbodytemp))
 			. = FALSE
-
 
 /mob/living/simple_animal/handle_environment()
 	var/atom/A = src.loc
@@ -1273,7 +1271,6 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 		if(AIStatus == AI_IDLE)
 			toggle_ai(AI_ON)
 
-
 /mob/living/simple_animal/onTransitZ(old_z, new_z)
 	..()
 	if (AIStatus == AI_Z_OFF)
@@ -1342,7 +1339,7 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 
 /mob/living/simple_animal/Moved()
 	. = ..()
-	if(world.time >= next_grid_update_time)
+	if((can_have_ai || AIStatus != AI_OFF) && world.time >= next_grid_update_time)
 		update_grid()
 
 /mob/living/simple_animal/proc/update_grid()

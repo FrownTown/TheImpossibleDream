@@ -54,7 +54,8 @@
 	STASTR = 16
 	STASPD = 3
 
-	ai_controller = /datum/ai_controller/elemental
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/elemental
 
 	// Capped, or a long fight buries the party in crawlers.
 	var/list/spawned_crawlers

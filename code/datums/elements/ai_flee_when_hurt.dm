@@ -14,7 +14,7 @@
 	if(!isliving(target))
 		return ELEMENT_INCOMPATIBLE
 	var/mob/living/living_target = target
-	if(!living_target.ai_controller)
+	if(!living_target.has_ai_brain())
 		return ELEMENT_INCOMPATIBLE
 	src.stop_fleeing_at = stop_fleeing_at
 	src.start_fleeing_below = start_fleeing_below
@@ -28,34 +28,34 @@
 /datum/element/ai_flee_while_injured/proc/on_health_changed(mob/living/source)
 	SIGNAL_HANDLER
 
-	if (!source.ai_controller)
+	if (!source.has_ai_brain())
 		return
 
 	var/current_health_percentage = source.health / source.maxHealth
-	if (source.ai_controller.blackboard[BB_BASIC_MOB_FLEEING])
+	if (source.ai_bb_get(BB_BASIC_MOB_FLEEING))
 		if (current_health_percentage < stop_fleeing_at)
 			return
-		source.ai_controller.CancelActions() // Stop fleeing go back to whatever you were doing
-		source.ai_controller.set_blackboard_key(BB_BASIC_MOB_FLEEING, FALSE)
+		source.ai_cancel_actions() // Stop fleeing go back to whatever you were doing
+		source.ai_bb_set(BB_BASIC_MOB_FLEEING, FALSE)
 		return
 
-	if(BB_BASIC_MOB_NEXT_FLEEING in source.ai_controller.blackboard)
-		if(source.ai_controller.blackboard[BB_BASIC_MOB_NEXT_FLEEING] > world.time)
+	if(BB_BASIC_MOB_NEXT_FLEEING in source.ai_blackboard())
+		if(source.ai_bb_get(BB_BASIC_MOB_NEXT_FLEEING) > world.time)
 			return
 
 	if (current_health_percentage > start_fleeing_below)
 		return
-	source.ai_controller.CancelActions()
-	source.ai_controller.set_blackboard_key(BB_BASIC_MOB_FLEEING, TRUE)
-	source.ai_controller.set_blackboard_key(BB_BASIC_MOB_NEXT_FLEEING, world.time + 60 SECONDS)
+	source.ai_cancel_actions()
+	source.ai_bb_set(BB_BASIC_MOB_FLEEING, TRUE)
+	source.ai_bb_set(BB_BASIC_MOB_NEXT_FLEEING, world.time + 60 SECONDS)
 
 	///we don't want ai's to run forever this makes us run for FLEE_TIME seconds then fight until
 	addtimer(CALLBACK(src, PROC_REF(cancel_flee), source), FLEE_TIME, flags = TIMER_UNIQUE)
 
 /datum/element/ai_flee_while_injured/proc/cancel_flee(mob/living/source)
 	if(!QDELETED(source))
-		source.ai_controller.CancelActions()
-		source.ai_controller.set_blackboard_key(BB_BASIC_MOB_FLEEING, FALSE)
+		source.ai_cancel_actions()
+		source.ai_bb_set(BB_BASIC_MOB_FLEEING, FALSE)
 
 #undef FLEE_TIME
 #undef NEXT_FLEE_TIME

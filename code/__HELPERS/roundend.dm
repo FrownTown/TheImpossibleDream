@@ -94,7 +94,7 @@
 	if(SSticker.current_state != GAME_STATE_FINISHED)
 		return
 	status_flags |= GODMODE
-	ai_controller?.set_ai_status(AI_STATUS_OFF)
+	ai_set_status(AI_STATUS_OFF)
 	if(client)
 		add_verb(client, /client/proc/lobbyooc)
 		add_verb(client, /client/proc/view_stats)
@@ -346,7 +346,6 @@
 		var/datum/antagonist/last = all_antagonists[all_antagonists.len]
 		if(last.show_in_roundend)
 			last.roundend_report_footer()
-
 
 	return
 
@@ -643,7 +642,6 @@
 		parts += "<li>[printplayer(M,fleecheck)]</li>"
 	parts += "</ul>"
 	return parts.Join()
-
 
 /proc/printobjectives(list/objectives)
 	if(!objectives || !objectives.len)

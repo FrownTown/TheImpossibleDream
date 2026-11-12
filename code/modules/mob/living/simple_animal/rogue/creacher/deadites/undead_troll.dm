@@ -12,7 +12,8 @@
 	pixel_x = -16
 	health = TROLL_HEALTH_UNDEAD
 	maxHealth = TROLL_HEALTH_UNDEAD
-	ai_controller = /datum/ai_controller/undead_troll
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/undead_troll
 	move_base_delay = MOVEMENT_DELAY_SPD_3
 
 	head_butcher = /obj/item/natural/head/troll/undead

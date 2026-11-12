@@ -62,14 +62,14 @@
 	retreat_health = 0.3
 	aggressive = 1
 
-
 	remains_type = /obj/effect/decal/remains/bigrat
 	eat_forever = TRUE
 
 //new ai, old ai off
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/big_rat
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/big_rat
 	move_base_delay = MOVEMENT_DELAY_SPD_3
 	melee_cooldown = RAT_ATTACK_SPEED
 	stat_attack = UNCONSCIOUS
@@ -96,8 +96,7 @@
 		icon_living = "Frat"
 		icon_dead = "Frat1"
 	update_icon()
-	ai_controller.set_blackboard_key(BB_BASIC_FOODS, food_type)
-
+	ai_bb_set(BB_BASIC_FOODS, food_type)
 
 /mob/living/simple_animal/hostile/retaliate/rogue/bigrat/death(gibbed)
 	..()
@@ -136,7 +135,6 @@
 	if(pulledby)
 		Retaliate()
 		GiveTarget(pulledby)
-
 
 /datum/intent/simple/bite/bigrat
 	clickcd = RAT_ATTACK_SPEED

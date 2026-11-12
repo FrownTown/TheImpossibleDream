@@ -46,9 +46,6 @@
 				friends += M
 				visible_message(span_notice("[src] seems to like [M]."))
 
-/mob/living/simple_animal/hostile/retaliate
-	var/aggressive = 0
-
 /mob/living/simple_animal/hostile/retaliate/can_be_held(mob/by)
 	return ..() && !aggressive && !(WEAKREF(by) in enemies)
 
@@ -114,7 +111,6 @@
 			for(var/mob/living/E in resolve_enemies())
 				H.add_enemy(E)
 	return 0
-
 
 /mob/living/simple_animal/hostile/retaliate/adjustHealth(amount, updating_health = TRUE, forced = FALSE)
 	. = ..()

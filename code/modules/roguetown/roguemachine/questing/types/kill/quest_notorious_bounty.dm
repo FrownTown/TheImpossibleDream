@@ -71,7 +71,6 @@
 		return "Bring down a notorious outlaw"
 	return "Bring down [boss_name]"
 
-
 /datum/quest/kill/notorious_bounty/get_objective_text()
 	return "Slay the target, but be warned! They are rumored to be a truly formidable opponent!"
 
@@ -191,8 +190,8 @@
 		var/mob/dead/new_player/N = chosen
 		N.close_spawn_windows()
 	boss.key = chosen.key
-	if(boss.client && boss.ai_controller)
-		QDEL_NULL(boss.ai_controller)
+	if(boss.client)
+		boss.ai_remove_brain()
 	RegisterSignal(boss, COMSIG_LIVING_DEATH, PROC_REF(on_player_boss_death))
 	// Prevent the mob from getting instaambushed
 	boss.ambushable = FALSE

@@ -39,13 +39,13 @@
 
 /datum/component/conjured_minion/proc/make_docile()
 	var/mob/living/M = parent
-	if(QDELETED(M) || !M.ai_controller)
+	if(QDELETED(M) || !M.has_ai_brain())
 		return
 	var/mob/living/summoner = summoner_ref?.resolve()
 	if(!summoner)
 		return
-	M.ai_controller.set_blackboard_key(BB_FOLLOW_TARGET, summoner)
-	M.ai_controller.set_blackboard_key(BB_TARGETTING_DATUM, GLOB.conjured_targetting)
+	M.ai_bb_set(BB_FOLLOW_TARGET, summoner)
+	M.ai_bb_set(BB_TARGETTING_DATUM, GLOB.conjured_targetting)
 	M.pet_passive = TRUE
 
 /datum/component/conjured_minion/Destroy(force, silent)
@@ -79,8 +79,7 @@
 	var/mob/living/summoner = summoner_ref?.resolve()
 	if(!summoner || summoner.z != source.z)
 		return
-	var/datum/ai_controller/AC = M.ai_controller
-	if(AC && AC.blackboard[BB_TRAVEL_DESTINATION])
+	if(M.ai_bb_get(BB_TRAVEL_DESTINATION))
 		return
 	var/newdist = get_dist(newloc, summoner)
 	if(newdist <= leash_range)
@@ -105,10 +104,9 @@
 	strain_tether(M)
 
 /datum/component/conjured_minion/proc/validate_combat_target(mob/living/M, mob/living/summoner)
-	var/datum/ai_controller/AC = M.ai_controller
-	if(!AC)
+	if(!M.has_ai_brain())
 		return
-	var/mob/living/current = AC.blackboard[BB_BASIC_MOB_CURRENT_TARGET]
+	var/mob/living/current = M.ai_bb_get(BB_BASIC_MOB_CURRENT_TARGET)
 	if(isnull(current))
 		return
 	if(!QDELETED(current) && !current.stat)
@@ -116,10 +114,10 @@
 			return
 		if(get_dist(current, summoner) <= leash_range + 1)
 			return
-	AC.clear_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET)
-	if(AC.blackboard[BB_HIGHEST_THREAT_MOB] == current)
-		AC.clear_blackboard_key(BB_HIGHEST_THREAT_MOB)
-	var/list/table = AC.blackboard[BB_MOB_AGGRO_TABLE]
+	M.ai_bb_clear(BB_BASIC_MOB_CURRENT_TARGET)
+	if(M.ai_bb_get(BB_HIGHEST_THREAT_MOB) == current)
+		M.ai_bb_clear(BB_HIGHEST_THREAT_MOB)
+	var/list/table = M.ai_bb_get(BB_MOB_AGGRO_TABLE)
 	if(islist(table))
 		table -= current
 

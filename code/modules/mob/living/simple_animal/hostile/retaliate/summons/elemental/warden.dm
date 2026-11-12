@@ -1,4 +1,3 @@
-
 /mob/living/simple_animal/hostile/retaliate/rogue/elemental/warden
 	anatomy_type = /datum/anatomy/construct/standard
 	icon = 'icons/mob/summonable/32x32.dmi'
@@ -52,7 +51,8 @@
 	STASTR = 10
 	STASPD = 6
 
-	ai_controller = /datum/ai_controller/elemental
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/elemental
 	move_base_delay = MOVEMENT_DELAY_SLOW
 
 /mob/living/simple_animal/hostile/retaliate/rogue/elemental/warden/Initialize(mapload)

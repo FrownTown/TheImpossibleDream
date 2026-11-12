@@ -44,7 +44,8 @@
 
 	can_have_ai = FALSE //disable native ai
 	AIStatus = AI_OFF
-	ai_controller = /datum/ai_controller/dragger
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/dragger
 	move_base_delay = MOVEMENT_DELAY_LUMBERING
 
 /mob/living/simple_animal/hostile/rogue/dragger/electrocute_act(shock_damage, source, siemens_coeff = 1, flags = NONE)

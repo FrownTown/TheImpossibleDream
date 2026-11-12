@@ -4,7 +4,7 @@
 
 	// Sleep gate: skip Life() for AI-off NPCs to save cycles, but only if fully conscious.
 	// If not conscious, we must keep running Life() so wounds bleed, blood drops, and update_stat() can transition us.
-	if(!client && stat == CONSCIOUS && ai_controller && ai_controller.ai_status == AI_STATUS_OFF)
+	if(!client && stat == CONSCIOUS && ai_life_suspended())
 		return
 
 	SEND_SIGNAL(src, COMSIG_LIVING_LIFE, seconds, times_fired)

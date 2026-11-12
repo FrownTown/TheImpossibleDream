@@ -113,7 +113,8 @@
 	footstep_type = FOOTSTEP_MOB_BAREFOOT
 	retreat_health = 0
 	food = 0
-	ai_controller = /datum/ai_controller/primordial
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/primordial
 	move_base_delay = MOVEMENT_DELAY_SPD_17
 	special_ability = /datum/action/cooldown/spell/telegraphed_strike/dragons_breath/mob_ability/primordial/flame
 
@@ -162,7 +163,8 @@
 	retreat_health = 0
 	food = 0
 
-	ai_controller = /datum/ai_controller/primordial
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/primordial
 	move_base_delay = MOVEMENT_DELAY_SPD_10
 	special_ability = /datum/action/cooldown/spell/telegraphed_strike/dragons_breath/mob_ability/primordial/deluge
 
@@ -239,7 +241,8 @@
 	retreat_health = 0
 	food = 0
 
-	ai_controller = /datum/ai_controller/primordial
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/primordial
 	move_base_delay = MOVEMENT_DELAY_SPD_23
 	special_ability = /datum/action/cooldown/spell/telegraphed_strike/dragons_breath/mob_ability/primordial/gale
 

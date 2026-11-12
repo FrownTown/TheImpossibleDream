@@ -67,7 +67,8 @@
 	//new ai, old ai off
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/generic
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/generic
 	move_base_delay = MOVEMENT_DELAY_SLOW
 
 /mob/living/simple_animal/hostile/retaliate/rogue/swine/get_sound(input)
@@ -276,7 +277,7 @@
 /mob/living/simple_animal/hostile/retaliate/rogue/swine/Initialize(mapload)
 	. = ..()
 	AddElement(/datum/element/ai_retaliate)
-	ai_controller.set_blackboard_key(BB_BASIC_FOODS, typecacheof(food_type))
+	ai_bb_set(BB_BASIC_FOODS, typecacheof(food_type))
 
 /mob/living/simple_animal/hostile/retaliate/rogue/swine/taunted(mob/user)
 	emote("aggro")
@@ -291,7 +292,6 @@
 		list(TEXT_NORTH = list(0, 6), TEXT_SOUTH = list(0, 6), TEXT_EAST = list(-2, 6), TEXT_WEST = list(2, 6)),
 		MOB_LAYER+0.1,
 	)
-
 
 /mob/living/simple_animal/hostile/retaliate/rogue/swine/hog/update_icon()
 	cut_overlays()

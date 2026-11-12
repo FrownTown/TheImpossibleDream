@@ -116,7 +116,7 @@
 		pilot_action = new pilot_ability_type()
 		pilot_action.Grant(vessel)
 
-	vessel.ai_controller?.set_ai_status(AI_STATUS_OFF)
+	vessel.ai_set_status(AI_STATUS_OFF)
 	vessel.key = body.key
 
 	body.visible_message(span_warning("[body] stiffens, then stands vacant, eyes glazed and empty, a faint blue aura shivering about their trembling frame."))
@@ -207,7 +207,7 @@
 
 	if(body && vessel && vessel.key)
 		body.key = vessel.key
-		vessel.ai_controller?.reset_ai_status()
+		vessel.ai_reset_status()
 
 	if(body)
 		switch(reason)

@@ -1,0 +1,130 @@
+
+/bt_behavior/find_potential_targets
+	action_cooldown = 2 SECONDS
+	/// How far can we see stuff?
+	var/vision_range = 9
+	/// If TRUE, also scan one z-level up through transparent ceilings (treetops, open dungeon floors).
+	/// Sneak detection is skipped for targets found above - you can't passively spot a sneaker through a floor.
+	var/find_targets_above = TRUE
+
+
+/bt_behavior/find_potential_targets/perform(seconds_per_tick, datum/behavior_tree/node/parallel/root/controller, target_key, targetting_datum_key, hiding_location_key)
+	var/mob/living/living_mob = controller.pawn
+	if(living_mob.pet_passive)
+		return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_FAILED
+	var/datum/targetting_datum/targetting_datum = controller.blackboard[targetting_datum_key]
+
+	if(!targetting_datum)
+		CRASH("No target datum was supplied in the blackboard for [controller.pawn]")
+
+	var/atom/current_target = controller.blackboard[target_key]
+	if (targetting_datum.can_attack(living_mob, current_target))
+		return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_FAILED
+
+	controller.clear_blackboard_key(target_key)
+
+	// Wake/sleep is gated by spatial-grid cell tracking on the base controller.
+	// When no clients are in our cells we don't tick, so scanning here is cheap.
+	var/list/potential_targets = viewers(vision_range, controller.pawn) - living_mob
+	var/list/targets_from_above
+	if(find_targets_above)
+		var/turf/turf_above = GET_TURF_ABOVE(get_turf(controller.pawn))
+		if(turf_above && istransparentturf(turf_above))
+			var/list/above_targets = viewers(vision_range, turf_above) - living_mob
+			if(above_targets.len)
+				targets_from_above = above_targets
+				potential_targets |= above_targets
+
+	if(!potential_targets.len)
+		return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_FAILED
+
+	var/list/filtered_targets = list()
+
+	for(var/atom/pot_target in potential_targets)
+		if(targetting_datum.can_attack(living_mob, pot_target))//Can we attack it?
+			filtered_targets += pot_target
+			continue
+
+	for(var/mob/living/living_target in filtered_targets)
+		if(living_target.stat == DEAD)
+			filtered_targets -= living_target
+			continue
+		if(!living_target.rogue_sneaking)
+			continue
+		// Don't passively spot sneakers through a floor - matches old _npc.dm carve-out.
+		if(targets_from_above && (living_target in targets_from_above))
+			filtered_targets -= living_target
+			continue
+		var/extra_chance = (living_mob.health <= living_mob.maxHealth * 50) ? 30 : 0 // if we're below half health, we're way more alert
+		if (!living_mob.npc_detect_sneak(living_target, extra_chance))
+			filtered_targets -= living_target
+
+	if(!filtered_targets.len)
+		return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_FAILED
+
+	var/atom/target = pick_final_target(controller, filtered_targets)
+	controller.set_blackboard_key(target_key, target)
+
+	var/atom/potential_hiding_location = targetting_datum.find_hidden_mobs(living_mob, target)
+
+	if(potential_hiding_location) //If they're hiding inside of something, we need to know so we can go for that instead initially.
+		controller.set_blackboard_key(hiding_location_key, potential_hiding_location)
+
+	return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_SUCCEEDED
+
+
+/bt_behavior/find_potential_targets/finish_action(datum/behavior_tree/node/parallel/root/controller, succeeded, target_key, targeting_strategy_key, hiding_location_key)
+	. = ..()
+	if (succeeded)
+		controller.CancelActions()
+		controller.modify_cooldown(src, world.time + get_cooldown(controller))
+
+
+/// Returns the desired final target from the filtered list of targets
+/bt_behavior/find_potential_targets/proc/pick_final_target(datum/behavior_tree/node/parallel/root/controller, list/filtered_targets)
+	return pick(filtered_targets)
+
+
+/bt_behavior/find_potential_targets/human
+	vision_range = 7
+
+
+/bt_behavior/find_potential_targets/rat
+	vision_range = 2
+
+
+/bt_behavior/find_potential_targets/spider
+	vision_range = 5
+
+
+/bt_behavior/find_potential_targets/mimic
+	vision_range = 1
+
+
+/bt_behavior/find_potential_targets/mimic/finish_action(datum/behavior_tree/node/parallel/root/controller, succeeded, ...)
+	. = ..()
+	if (succeeded)
+		controller.CancelActions()
+		var/mob/living/simple_animal/hostile/retaliate/rogue/mimic/mimic_pawn = controller.pawn
+		mimic_pawn.undisguise()
+
+
+
+/bt_behavior/find_potential_targets/mole
+	vision_range = 9
+
+
+/bt_behavior/find_potential_targets/troll
+	vision_range = 7
+
+
+/bt_behavior/find_potential_targets/bog_troll
+	vision_range = 3
+
+
+/bt_behavior/find_potential_targets/bog_troll/finish_action(datum/behavior_tree/node/parallel/root/controller, succeeded, ...)
+	. = ..()
+	if(succeeded)
+		if(istype(controller.pawn, /mob/living/simple_animal/hostile/retaliate/rogue/troll))
+			var/mob/living/simple_animal/hostile/retaliate/rogue/troll/mob = controller.pawn
+			mob.ambush()

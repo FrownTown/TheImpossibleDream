@@ -730,7 +730,6 @@
 		message_admins(span_adminnotice("[key_name_admin(usr)] attempting to corgize [key_name_admin(H)]."))
 		H.corgize()
 
-
 	else if(href_list["forcespeech"])
 		if(!check_rights(R_FUN))
 			return
@@ -933,7 +932,6 @@
 				break
 
 		src.manage_free_slots()
-
 
 	else if(href_list["customjobslot"])
 		if(!check_rights(R_ADMIN))
@@ -1331,7 +1329,6 @@
 			else
 				obj_quality = null
 
-
 		var/atom/target //Where the object will be spawned
 		var/where = href_list["object_where"]
 		if (!( where in list("onfloor","frompod","inhand","inmarked") ))
@@ -1345,7 +1342,6 @@
 				faction_override = sanitize(custom)
 		else if(length(faction_preset))
 			faction_override = faction_preset
-
 
 		switch(where)
 			if("inhand")
@@ -1412,8 +1408,7 @@
 									var/mob/living/simple_animal/SA = spawned_mob
 									SA.toggle_ai(AI_OFF)
 									SA.can_have_ai = FALSE
-								if(spawned_mob.ai_controller)
-									QDEL_NULL(spawned_mob.ai_controller)
+								spawned_mob.ai_remove_brain()
 							if(faction_override && ismob(O))
 								var/mob/spawned_mob = O
 								spawned_mob.faction = list(faction_override)
@@ -1517,7 +1512,6 @@
 		else
 			thing_to_check = C.related_accounts_ip
 		thing_to_check = splittext(thing_to_check, ", ")
-
 
 		var/list/dat = list("Related accounts by [uppertext(href_list["showrelatedacc"])]:")
 		dat += thing_to_check

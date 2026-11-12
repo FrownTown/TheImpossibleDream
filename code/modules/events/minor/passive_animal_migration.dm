@@ -29,7 +29,6 @@ GLOBAL_LIST_INIT(animal_migration_points, list())
 	list("bog1", "bog2", "bog3", \
 	"coast", "coast2", "townouter",)
 
-
 /datum/round_event/animal_migration/start()
 	. = ..()
 
@@ -38,13 +37,9 @@ GLOBAL_LIST_INIT(animal_migration_points, list())
 	var/mob/living/simple_animal/hostile/retaliate/rogue/animal = pick(animals)
 	for(var/i = 1 to rand(3, 5))
 		var/mob/living/simple_animal/hostile/retaliate/rogue/created = new animal(start_turf)
-		if(created.ai_controller)
-			created.ai_controller.set_blackboard_key(BB_WANDER_POINT, end_turf)
-			var/list/ai_controller_paths = list()
-			for(var/datum/ai_planning_subtree/tree as anything in created.ai_controller.planning_subtrees)
-				ai_controller_paths |= tree.type
-			ai_controller_paths |= /datum/ai_planning_subtree/travel_to_point/and_clear_target/wander
-			created.ai_controller.replace_planning_subtrees(ai_controller_paths)
+		if(created.has_ai_brain())
+			created.ai_bb_set(BB_WANDER_POINT, end_turf)
+			created.ai_append_subtree(/datum/ai_planning_subtree/travel_to_point/and_clear_target/wander)
 		else
 			created.GiveTarget(end_turf)
 

@@ -10,7 +10,7 @@
 	if(minion)
 		minion.dismissing = TRUE
 
-	M.ai_controller?.set_ai_status(AI_STATUS_OFF)
+	M.ai_set_status(AI_STATUS_OFF)
 
 	if(istype(M, /mob/living/carbon/human/species/skeleton))
 		M.dust()

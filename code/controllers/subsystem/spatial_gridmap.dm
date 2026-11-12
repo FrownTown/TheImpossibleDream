@@ -26,6 +26,7 @@
 	var/list/hearing_contents
 	///every client possessed mob inside this cell
 	var/list/client_contents
+	var/list/ai_sleepers
 
 /datum/spatial_grid_cell/New(cell_x, cell_y, cell_z)
 	. = ..()
@@ -40,6 +41,7 @@
 		stack_trace("SSspatial_grid.dummy_list had something inserted into it at some point! this is a problem as it is supposed to stay empty")
 	hearing_contents = dummy_list
 	client_contents = dummy_list
+	ai_sleepers = dummy_list
 
 /datum/spatial_grid_cell/Destroy(force)
 	if(!force)//the response to someone trying to qdel this is a right proper fuck you
@@ -97,6 +99,7 @@ SUBSYSTEM_DEF(spatial_grid)
 	var/list/mob/oranges_ear/pregenerated_oranges_ears = list()
 	///how many pregenerated /mob/oranges_ear instances currently exist. this should hopefully never exceed its starting value
 	var/number_of_oranges_ears = NUMBER_OF_PREGENERATED_ORANGES_EARS
+	var/ai_sleeper_count = 0
 
 /datum/controller/subsystem/spatial_grid/Initialize(mapload)
 	cells_on_x_axis = SPATIAL_GRID_CELLS_PER_SIDE(world.maxx)
@@ -364,7 +367,6 @@ SUBSYSTEM_DEF(spatial_grid)
 			if(SPATIAL_GRID_CONTENTS_TYPE_HEARING)
 				GRID_CELL_SET(intersecting_cell.hearing_contents, new_target_contents[SPATIAL_GRID_CONTENTS_TYPE_HEARING])
 				SEND_SIGNAL(intersecting_cell, SPATIAL_GRID_CELL_ENTERED(SPATIAL_GRID_CONTENTS_TYPE_HEARING), new_target_contents[SPATIAL_GRID_CONTENTS_TYPE_HEARING])
-
 
 ///acts like enter_cell() but only adds the target to a specified type of grid cell contents list
 /datum/controller/subsystem/spatial_grid/proc/add_single_type(atom/movable/new_target, turf/target_turf, exclusive_type)
@@ -760,7 +762,91 @@ SUBSYSTEM_DEF(spatial_grid)
 	[cells_with_clients] cells have clients, [cells_with_hearables] have hearables\
 	the average client distance is: [average_client_distance], the average hearable_distance is [average_hearable_distance]")
 
+#undef NUMBER_OF_PREGENERATED_ORANGES_EARS
+
+// ==============================================================================
+// ==============================================================================
+
+/datum/controller/subsystem/spatial_grid/proc/add_ai_sleeper(mob/living/sleeper)
+	if(!initialized || sleeper.bt_sleep_cell)
+		return
+	var/turf/sleeper_turf = get_turf(sleeper)
+	if(!sleeper_turf)
+		return
+	var/datum/spatial_grid_cell/cell = grids_by_z_level[sleeper_turf.z][GET_SPATIAL_INDEX(sleeper_turf.y)][GET_SPATIAL_INDEX(sleeper_turf.x)]
+	GRID_CELL_ADD(cell.ai_sleepers, sleeper)
+	sleeper.bt_sleep_cell = cell
+	ai_sleeper_count++
+
+/datum/controller/subsystem/spatial_grid/proc/remove_ai_sleeper(mob/living/sleeper)
+	var/datum/spatial_grid_cell/cell = sleeper.bt_sleep_cell
+	if(!cell)
+		return
+	GRID_CELL_REMOVE(cell.ai_sleepers, sleeper)
+	sleeper.bt_sleep_cell = null
+	ai_sleeper_count--
+
+/datum/controller/subsystem/spatial_grid/proc/update_ai_sleeper(mob/living/sleeper)
+	var/datum/spatial_grid_cell/old_cell = sleeper.bt_sleep_cell
+	var/turf/new_turf = get_turf(sleeper)
+	if(new_turf && old_cell.cell_z == new_turf.z && old_cell.cell_x == GET_SPATIAL_INDEX(new_turf.x) && old_cell.cell_y == GET_SPATIAL_INDEX(new_turf.y))
+		return
+	remove_ai_sleeper(sleeper)
+	add_ai_sleeper(sleeper)
+
+/datum/controller/subsystem/spatial_grid/proc/client_mob_in_square(turf/center_turf, range)
+	if(!center_turf)
+		return FALSE
+	var/center_x = center_turf.x
+	var/center_y = center_turf.y
+	var/center_z = center_turf.z
+	var/list/grid_level = grids_by_z_level[center_z]
+	for(var/row in BOUNDING_BOX_MIN(center_y) to BOUNDING_BOX_MAX(center_y, cells_on_y_axis))
+		var/list/grid_row = grid_level[row]
+		for(var/x_index in BOUNDING_BOX_MIN(center_x) to BOUNDING_BOX_MAX(center_x, cells_on_x_axis))
+			var/datum/spatial_grid_cell/cell = grid_row[x_index]
+			for(var/mob/client_mob as anything in cell.client_contents)
+				if(isobserver(client_mob))
+					continue
+				var/turf/client_turf = get_turf(client_mob)
+				if(client_turf && client_turf.z == center_z && abs(client_turf.x - center_x) <= range && abs(client_turf.y - center_y) <= range)
+					return TRUE
+	return FALSE
+
+/datum/controller/subsystem/spatial_grid/proc/ai_sleepers_in_square(turf/center_turf, range)
+	if(!center_turf || !ai_sleeper_count)
+		return null
+	var/center_x = center_turf.x
+	var/center_y = center_turf.y
+	var/center_z = center_turf.z
+	var/list/grid_level = grids_by_z_level[center_z]
+	for(var/row in BOUNDING_BOX_MIN(center_y) to BOUNDING_BOX_MAX(center_y, cells_on_y_axis))
+		var/list/grid_row = grid_level[row]
+		for(var/x_index in BOUNDING_BOX_MIN(center_x) to BOUNDING_BOX_MAX(center_x, cells_on_x_axis))
+			var/datum/spatial_grid_cell/cell = grid_row[x_index]
+			for(var/mob/living/sleeper as anything in cell.ai_sleepers)
+				var/turf/sleeper_turf = get_turf(sleeper)
+				if(sleeper_turf && sleeper_turf.z == center_z && abs(sleeper_turf.x - center_x) <= range && abs(sleeper_turf.y - center_y) <= range)
+					LAZYADD(., sleeper)
+
+/datum/controller/subsystem/spatial_grid/proc/living_mobs_in_square(turf/center_turf, range)
+	. = list()
+	if(!center_turf)
+		return
+	var/center_x = center_turf.x
+	var/center_y = center_turf.y
+	var/center_z = center_turf.z
+	var/list/grid_level = grids_by_z_level[center_z]
+	for(var/row in BOUNDING_BOX_MIN(center_y) to BOUNDING_BOX_MAX(center_y, cells_on_y_axis))
+		var/list/grid_row = grid_level[row]
+		for(var/x_index in BOUNDING_BOX_MIN(center_x) to BOUNDING_BOX_MAX(center_x, cells_on_x_axis))
+			var/datum/spatial_grid_cell/cell = grid_row[x_index]
+			for(var/atom/movable/hearer as anything in cell.hearing_contents)
+				if(!isliving(hearer))
+					continue
+				var/turf/hearer_turf = get_turf(hearer)
+				if(hearer_turf && hearer_turf.z == center_z && abs(hearer_turf.x - center_x) <= range && abs(hearer_turf.y - center_y) <= range)
+					. += hearer
+
 #undef BOUNDING_BOX_MAX
 #undef BOUNDING_BOX_MIN
-
-#undef NUMBER_OF_PREGENERATED_ORANGES_EARS

@@ -49,7 +49,8 @@
 	dodgetime = 40
 	aggressive = 1
 
-	ai_controller = /datum/ai_controller/fae/skirmisher
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/fae/skirmisher
 	move_base_delay = MOVEMENT_DELAY_SPD_23
 
 	var/frost_cooldown = 3 SECONDS

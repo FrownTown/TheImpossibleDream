@@ -1,0 +1,31 @@
+/datum/behavior_tree/node/subtree/generic_break_restraints/SelectBehaviors(datum/behavior_tree/node/parallel/root/controller, seconds_per_tick)
+	var/mob/living/carbon/living_pawn = controller.pawn
+	if(!isliving(living_pawn))
+		return
+
+	if(!living_pawn.handcuffed && !living_pawn.legcuffed)
+		return
+
+	if(SPT_PROB(50, seconds_per_tick))
+		controller.queue_behavior(/bt_behavior/break_restraints)
+		return SUBTREE_RETURN_FINISH_PLANNING
+
+
+/bt_behavior/break_restraints
+	behavior_flags = AI_BEHAVIOR_CAN_PLAN_DURING_EXECUTION
+	action_cooldown = 45 SECONDS
+
+
+/bt_behavior/break_restraints/perform(seconds_per_tick, datum/behavior_tree/node/parallel/root/controller)
+	var/mob/living/carbon/living_pawn = controller.pawn
+	if(living_pawn.incapacitated(ignore_restraints = TRUE))
+		return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_FAILED
+	if(!living_pawn.handcuffed && !living_pawn.legcuffed)
+		return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_FAILED
+
+	if(living_pawn.handcuffed)
+		living_pawn.cuff_resist(living_pawn.handcuffed)
+	else if(living_pawn.legcuffed)
+		living_pawn.cuff_resist(living_pawn.legcuffed)
+
+	return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_SUCCEEDED

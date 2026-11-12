@@ -1,0 +1,50 @@
+/bt_behavior/find_and_set/better_weapon
+
+
+/bt_behavior/find_and_set/better_weapon/search_tactic(datum/behavior_tree/node/parallel/root/controller, locate_path, search_range)
+	var/mob/living/carbon/human/living_pawn = controller.pawn
+	if(living_pawn.incapacitated())
+		return
+	if(ai_npc_has_weapon(living_pawn))
+		return
+	var/obj/item/held_item = living_pawn.get_active_held_item()
+	if(istype(held_item, /obj/item/rogueweapon/shield))
+		living_pawn.swap_hand()
+		held_item = living_pawn.get_active_held_item()
+
+	var/weapon_type = controller.blackboard[BB_WEAPON_TYPE]
+	var/list/weapons = list()
+	for(var/obj/item/local_candidate in oview(search_range, controller.pawn))
+		if(!istype(local_candidate, weapon_type))
+			continue
+		if(held_item)
+			if(held_item.force >= local_candidate.force)
+				continue
+		weapons += local_candidate
+	if(weapons.len)
+		return pick(weapons)
+
+
+/bt_behavior/find_and_set/better_weapon/atom_allowed(atom/movable/checking, locate_path, atom/pawn)
+	if(checking == pawn)
+		return FALSE
+	var/mob/living/carbon/human/living_pawn = pawn
+	if(!living_pawn?.has_ai_brain())
+		return FALSE
+	if(living_pawn.incapacitated())
+		return FALSE
+	if(ai_npc_has_weapon(living_pawn))
+		return FALSE
+	var/datum/behavior_tree/node/parallel/root/controller = living_pawn.ai_root
+	if(!istype(checking, controller.blackboard[BB_WEAPON_TYPE]))
+		return FALSE
+	var/obj/item/held_item = living_pawn.get_active_held_item()
+	if(istype(held_item, /obj/item/rogueweapon/shield))
+		held_item = living_pawn.get_inactive_held_item()
+	if(held_item)
+		if(istype(held_item, /obj/item/rogueweapon/shield))
+			return FALSE
+		var/obj/item/candidate = checking
+		if(held_item.force >= candidate.force)
+			return FALSE
+	return TRUE

@@ -45,7 +45,8 @@
 	check_friendly_fire = 1
 	health = 200
 	maxHealth = 200
-	ai_controller = /datum/ai_controller/reiver_crossbow
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/reiver_crossbow
 	gender = MALE
 	mob_biotypes = MOB_HUMANOID
 	robust_searching = 1
@@ -76,7 +77,8 @@
 	icon_living = "lance_rider"
 	icon_dead = "lance_rider_dead"
 	attack_sound = 'sound/foley/pierce.ogg'
-	ai_controller = /datum/ai_controller/reiver_rider/lance
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/reiver_rider/lance
 	health = 650
 	maxHealth = 650
 	gender = MALE
@@ -103,7 +105,8 @@
 	pixel_x = -16
 
 /mob/living/simple_animal/hostile/rogue/border_reiver_lance_rider/sabre
-	ai_controller = /datum/ai_controller/reiver_rider
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/reiver_rider
 	base_intents = list(/datum/intent/simple/reiver_rider_sabre,)
 	icon_state = "sabre_rider"
 	icon_living = "sabre_rider"

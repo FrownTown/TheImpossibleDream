@@ -49,7 +49,8 @@
 	//new ai, old ai off
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/generic
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/generic
 	move_base_delay = MOVEMENT_DELAY_SLOW
 
 /mob/living/simple_animal/pet/cat/Initialize(mapload)
@@ -64,7 +65,6 @@
 		else
 			icon_state = "[icon_living]"
 	regenerate_icons()
-
 
 /mob/living/simple_animal/pet/cat/Crossed(mob/living/L) // Gato Basado - makes it leave when people step too close
 	. = ..()
@@ -263,10 +263,6 @@
 						stop_automated_movement = 0
 						break
 
-
-
-
-
 /mob/living/simple_animal/pet/cat/rogue/attack_hand(mob/living/carbon/human/M)
 	. = ..()
 	if( (isdarkelf(M)) ) // l´cursed bonbonbon
@@ -277,7 +273,6 @@
 				wuv(1, M)
 			if(INTENT_HARM)
 				wuv(-1, M)
-
 
 /mob/living/simple_animal/pet/cat/proc/wuv(change, mob/M)
 	if(change)

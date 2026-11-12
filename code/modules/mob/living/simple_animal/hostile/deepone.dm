@@ -45,7 +45,8 @@
 	can_have_ai = FALSE
 	AIStatus = AI_OFF
 
-	ai_controller = /datum/ai_controller/deepone
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/deepone
 	move_base_delay = MOVEMENT_DELAY_SPD_10
 
 /mob/living/simple_animal/hostile/rogue/deepone/Initialize(mapload)
@@ -78,7 +79,8 @@
 	minimum_distance = 5
 	ranged_cooldown_time = 40
 	check_friendly_fire = 1
-	ai_controller = /datum/ai_controller/deepone_ranged
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/deepone_ranged
 	move_base_delay = MOVEMENT_DELAY_SPD_3
 
 /mob/living/simple_animal/hostile/rogue/deepone/wiz
@@ -95,7 +97,8 @@
 	minimum_distance = 5
 	ranged_cooldown_time = 70
 	check_friendly_fire = 1
-	ai_controller = /datum/ai_controller/deepone_ranged
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/deepone_ranged
 	move_base_delay = MOVEMENT_DELAY_SPD_3
 	var/allowed_projectile_types = list(/obj/projectile/magic/frostbolt, /obj/projectile/energy/rogue3)
 
@@ -146,7 +149,8 @@
 	melee_damage_lower = 12
 	melee_damage_upper = 32
 	move_base_delay = MOVEMENT_DELAY_SPD_17
-	ai_controller = /datum/ai_controller/deepone_hound
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/deepone_hound
 	var/pounce_type = /datum/action/cooldown/spell/telegraphed_strike/mob_ability/deepone_pounce
 
 /mob/living/simple_animal/hostile/rogue/deepone/hound/Initialize(mapload)

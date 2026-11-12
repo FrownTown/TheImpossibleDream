@@ -45,8 +45,6 @@
 			choice = new choice(realchest)
 			qdel(src)
 
-
-
 // Soul Churner - Music box which applies magic resistance to Inquisition members, greatly mood debuffs everyone not a Psydon worshipper.
 /obj/item/psydonmusicbox
 	name = "melancholic crankbox"
@@ -288,8 +286,6 @@
 						H.add_stress(/datum/stressevent/soulchurner)
 						if(!H.has_status_effect(/datum/status_effect/buff/churnernegative))
 							H.apply_status_effect(/datum/status_effect/buff/churnernegative)
-
-
 
 /atom/movable/screen/alert/status_effect/buff/quelling_soulchurner
 	name = "Quelling Soulchurner"
@@ -627,8 +623,7 @@ Inquisitorial armory down here
 	L.emote("cry")
 	L.Stun(5 SECONDS)
 	sleep(15)
-	if(L.ai_controller)
-		QDEL_NULL(L.ai_controller)
+	L.ai_remove_brain()
 	var/mob/living/source = redeemer?.resolve()
 	if(source)
 		walk_away(L, source, 100, 2)
@@ -977,7 +972,6 @@ Inquisitorial armory down here
 				return list("shrink" = 0.5,"sx" = -4,"sy" = -6,"nx" = 9,"ny" = -6,"wx" = -6,"wy" = -4,"ex" = 4,"ey" = -6,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0,"nturn" = 0,"sturn" = 90,"wturn" = 93,"eturn" = -12,"nflip" = 0,"sflip" = 1,"wflip" = 0,"eflip" = 0)
 			if("onbelt")
 				return list("shrink" = 0.3,"sx" = -2,"sy" = -5,"nx" = 4,"ny" = -5,"wx" = 0,"wy" = -5,"ex" = 2,"ey" = -5,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 0,"sflip" = 0,"wflip" = 0,"eflip" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0)
-
 
 /obj/item/inqarticles/garrote // Do not give this item out freely to other classes. Do not subtype this item for other classes. This is intended purely as the Confessor's identifying sidegrade, and as a bonus for the Inspector INQ. I will be very sad if you disregard this comment. Thank you. - Yische.
 	name = "\proper seizing garrote" // It's nonlethal. It's so silly and fun.
@@ -1355,7 +1349,6 @@ Inquisitorial armory down here
 			if("onbelt")
 				return list("shrink" = 0.3,"sx" = -2,"sy" = -5,"nx" = 4,"ny" = -5,"wx" = 0,"wy" = -5,"ex" = 2,"ey" = -5,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 0,"sflip" = 0,"wflip" = 0,"eflip" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0)
 
-
 /obj/item/inqarticles/bmirror
 	name = "black mirror"
 	desc = ""
@@ -1549,7 +1542,6 @@ Inquisitorial armory down here
 	else
 		to_chat(user, span_warning("I need to open it first."))
 		return
-
 
 /obj/item/inqarticles/bmirror/attackby(obj/item/I, mob/user, params)
 	. = ..()

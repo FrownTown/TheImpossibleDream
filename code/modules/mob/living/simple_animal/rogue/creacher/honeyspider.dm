@@ -57,7 +57,8 @@
 	//new ai, old ai off
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
-	ai_controller = /datum/ai_controller/spider
+	ai_controller = null
+	bt_tree = /datum/behavior_tree/node/planner/spider
 	move_base_delay = MOVEMENT_DELAY_SPD_10
 	melee_cooldown = HONEYSPIDER_ATTACK_SPEED
 	stat_attack = UNCONSCIOUS
@@ -84,7 +85,7 @@
 	if(prob(33))
 		gender = FEMALE
 	update_icon()
-	ai_controller.set_blackboard_key(BB_BASIC_FOODS, food_type)
+	ai_bb_set(BB_BASIC_FOODS, food_type)
 	ADD_TRAIT(src, TRAIT_KNEESTINGER_IMMUNITY, INNATE_TRAIT)
 
 /mob/living/simple_animal/hostile/retaliate/rogue/spider/AttackingTarget()
